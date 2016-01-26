@@ -9,4 +9,4 @@ build
 .pydevproject
 *~
 src/protobuf_to_dict.egg-info
-
+.idea

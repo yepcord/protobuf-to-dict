@@ -1,9 +1,11 @@
-import unittest
-from tests.sample_pb2 import MessageOfTypes, extDouble, extString, NestedExtension
-from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf
+# -*- coding:utf-8 -*-
 import base64
+import unittest
+
 import nose.tools
-import json
+
+from tests.sample_pb2 import MessageOfTypes
+from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf
 
 
 class Test(unittest.TestCase):
@@ -97,8 +99,8 @@ class Test(unittest.TestCase):
         m = MessageOfTypes()
         m.dubl = 1.7e+308
         m.flot = 3.4e+038
-        m.i32 = 2 ** 31 - 1 # 2147483647 #
-        m.i64 = 2 ** 63 - 1 #0x7FFFFFFFFFFFFFFF
+        m.i32 = 2 ** 31 - 1  # 2147483647 #
+        m.i64 = 2 ** 63 - 1  # 0x7FFFFFFFFFFFFFFF
         m.ui32 = 2 ** 32 - 1
         m.ui64 = 2 ** 64 - 1
         m.si32 = -1 * m.i32
@@ -112,42 +114,17 @@ class Test(unittest.TestCase):
         m.byts = b'\n\x14\x1e'
         assert len(m.byts) == 3, len(m.byts)
         m.nested.req = "req"
-        m.enm = MessageOfTypes.C #@UndefinedVariable
+        m.enm = MessageOfTypes.C  # @UndefinedVariable
         m.enmRepeated.extend([MessageOfTypes.A, MessageOfTypes.C])
-        m.range.extend(range(10))
         return m
 
     def compare(self, m, d, exclude=None):
         i = 0
         exclude = ['byts', 'nested'] + (exclude or [])
-        for i, field in enumerate(MessageOfTypes.DESCRIPTOR.fields): #@UndefinedVariable
+        for i, field in enumerate(MessageOfTypes.DESCRIPTOR.fields):  # @UndefinedVariable
             if field.name not in exclude:
                 assert field.name in d, field.name
                 assert d[field.name] == getattr(m, field.name), (field.name, d[field.name])
         assert i > 0
         assert m.byts == base64.b64decode(d['byts'])
         assert d['nested'] == {'req': m.nested.req}
-
-    def test_extensions(self):
-        m = MessageOfTypes()
-
-        primitives = {extDouble: 123.4, extString: "string", NestedExtension.extInt: 4}
-
-        for key, value in primitives.items():
-            m.Extensions[key] = value
-        m.Extensions[NestedExtension.extNested].req = "nested"
-
-        # Confirm compatibility with JSON serialization
-        res = json.loads(json.dumps(protobuf_to_dict(m)))
-        assert '___X' in res
-        exts = res['___X']
-        assert set(exts.keys()) == set([str(f.number) for f, _ in m.ListFields() if f.is_extension])
-        for key, value in primitives.items():
-            assert exts[str(key.number)] == value
-        assert exts[str(NestedExtension.extNested.number)]['req'] == 'nested'
-
-        deser = dict_to_protobuf(MessageOfTypes, res)
-        assert deser
-        for key, value in primitives.items():
-            assert deser.Extensions[key] == m.Extensions[key]
-        assert deser.Extensions[NestedExtension.extNested].req == m.Extensions[NestedExtension.extNested].req
