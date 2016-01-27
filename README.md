@@ -1,3 +1,17 @@
+# protobuf3-to-dict
+
+I upgraded it to support PY3 and PB3. As Ben is not updated this library again, I rename it to
+protobuf3-to-dict. Now u can install it with
+
+    pip install protobuf3-to-dict
+      
+or
+
+    easy_install protobuf3-to-dict
+
+
+-----------old readme by Ben-------------
+
 # protobuf-to-dict
 
 protobuf-to-dict is a small Python library for creating dicts from protocol

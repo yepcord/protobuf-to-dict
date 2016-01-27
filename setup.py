@@ -2,14 +2,15 @@
 from setuptools import setup
 
 setup(
-    name='protobuf-to-dict',
-    description=('A teeny Python library for creating Python dicts from '
+    name='protobuf3-to-dict',
+    description=('Ben Hodgson: A teeny Python library for creating Python dicts from '
                  'protocol buffers and the reverse. Useful as an intermediate '
-                 'step before serialisation (e.g. to JSON).'),
+                 'step before serialisation (e.g. to JSON). '
+                 'Kapor: upgrade it to PB3 and PY3, rename it to protobuf3-to-dict'),
     version='0.1.0',
-    author='Ben Hodgson',
-    author_email='ben@benhodgson.com',
-    url='https://github.com/benhodgson/protobuf-to-dict',
+    author='Kapor Zhu',
+    author_email='kapor.zhu@gmail.com',
+    url='https://github.com/kaporzhu/protobuf-to-dict',
     license='Public Domain',
     keywords=['protobuf', 'json', 'dict'],
     install_requires=['protobuf>=2.3.0', 'six'],
@@ -20,6 +21,9 @@ setup(
     test_suite='nose.collector',
     classifiers=[
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.5',
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: Public Domain',
