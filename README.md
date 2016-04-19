@@ -1,6 +1,6 @@
 # protobuf3-to-dict
 
-I upgraded it to support PY3 and PB3. As Ben is not updated this library again, I rename it to
+I upgraded it to support PY3 and PB3. As Ben is not updated this library any more, I rename it to
 protobuf3-to-dict. Now u can install it with
 
     pip install protobuf3-to-dict
