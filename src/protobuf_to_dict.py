@@ -47,7 +47,12 @@ def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=Fa
     extensions = {}
     for field, value in pb.ListFields():
         if field.message_type and field.message_type.has_options and field.message_type.GetOptions().map_entry:
-            result_dict[field.name] = dict(value)
+            result_dict[field.name] = dict()
+            value_field = field.message_type.fields_by_name['value']
+            type_callable = _get_field_value_adaptor(
+                pb, value_field, type_callable_map, use_enum_labels)
+            for k, v in value.items():
+                result_dict[field.name][k] = type_callable(v)
             continue
         type_callable = _get_field_value_adaptor(pb, field, type_callable_map, use_enum_labels)
         if field.label == FieldDescriptor.LABEL_REPEATED:
@@ -142,7 +147,12 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict):
     for field, input_value, pb_value in fields:
         if field.label == FieldDescriptor.LABEL_REPEATED:
             if field.message_type and field.message_type.has_options and field.message_type.GetOptions().map_entry:
-                pb_value.update(input_value)
+                value_field = field.message_type.fields_by_name['value']
+                for key, value in input_value.items():
+                    if value_field.cpp_type == FieldDescriptor.CPPTYPE_MESSAGE:
+                        _dict_to_protobuf(getattr(pb, field.name)[key], value, type_callable_map, strict)
+                    else:
+                        getattr(pb, field.name)[key] = value
                 continue
             for item in input_value:
                 if field.type == FieldDescriptor.TYPE_MESSAGE:
