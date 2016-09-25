@@ -25,6 +25,8 @@ message MessageOfTypes {
 	Enum enm = 17;
 	repeated NestedType nestedRepeated = 18;
 	repeated Enum enmRepeated = 19;
+	map<string, float> simpleMap = 20;
+	map<string, NestedType> nestedMap = 21;
 
 	message NestedType {
 		string req = 1;

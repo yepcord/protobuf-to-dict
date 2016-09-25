@@ -12,7 +12,7 @@ class Test(unittest.TestCase):
     def test_basics(self):
         m = self.populate_MessageOfTypes()
         d = protobuf_to_dict(m)
-        self.compare(m, d, ['nestedRepeated'])
+        self.compare(m, d, ['nestedRepeated', 'nestedMap'])
 
         m2 = dict_to_protobuf(MessageOfTypes, d)
         assert m == m2
@@ -20,7 +20,7 @@ class Test(unittest.TestCase):
     def test_use_enum_labels(self):
         m = self.populate_MessageOfTypes()
         d = protobuf_to_dict(m, use_enum_labels=True)
-        self.compare(m, d, ['enm', 'enmRepeated', 'nestedRepeated'])
+        self.compare(m, d, ['enm', 'enmRepeated', 'nestedRepeated', 'nestedMap'])
         assert d['enm'] == 'C'
         assert d['enmRepeated'] == ['A', 'C']
 
@@ -42,7 +42,7 @@ class Test(unittest.TestCase):
     def test_repeated_enum(self):
         m = self.populate_MessageOfTypes()
         d = protobuf_to_dict(m, use_enum_labels=True)
-        self.compare(m, d, ['enm', 'enmRepeated', 'nestedRepeated'])
+        self.compare(m, d, ['enm', 'enmRepeated', 'nestedRepeated', 'nestedMap'])
         assert d['enmRepeated'] == ['A', 'C']
 
         m2 = dict_to_protobuf(MessageOfTypes, d)
@@ -57,7 +57,7 @@ class Test(unittest.TestCase):
         m.nestedRepeated.extend([MessageOfTypes.NestedType(req=str(i)) for i in range(10)])
 
         d = protobuf_to_dict(m)
-        self.compare(m, d, exclude=['nestedRepeated'])
+        self.compare(m, d, exclude=['nestedRepeated', 'nestedMap'])
         assert d['nestedRepeated'] == [{'req': str(i)} for i in range(10)]
 
         m2 = dict_to_protobuf(MessageOfTypes, d)
@@ -95,6 +95,21 @@ class Test(unittest.TestCase):
         m2 = dict_to_protobuf(MessageOfTypes, d, strict=False)
         assert m == m2
 
+    def test_nested_map(self):
+        m = self.populate_MessageOfTypes()
+
+        for i in range(10):
+            m.nestedMap[str(i)].req = str(i**2)
+
+        d = protobuf_to_dict(m)
+        self.compare(m, d, exclude=['nestedRepeated', 'nestedMap'])
+        assert d['nestedMap'] == {
+            str(i): {'req': str(i**2)} for i in range(10)
+        }
+
+        m2 = dict_to_protobuf(MessageOfTypes, d)
+        assert m == m2
+
     def populate_MessageOfTypes(self):
         m = MessageOfTypes()
         m.dubl = 1.7e+308
@@ -116,6 +131,8 @@ class Test(unittest.TestCase):
         m.nested.req = "req"
         m.enm = MessageOfTypes.C  # @UndefinedVariable
         m.enmRepeated.extend([MessageOfTypes.A, MessageOfTypes.C])
+        m.simpleMap['s1'] = 4.2
+        m.simpleMap['s2'] = 42.
         return m
 
     def compare(self, m, d, exclude=None):
