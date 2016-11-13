@@ -123,6 +123,27 @@ class Test(unittest.TestCase):
         m2 = dict_to_protobuf(MessageOfTypes, d)
         assert m == m2
 
+    def test_ignore_none(self):
+        m = MessageOfTypes()
+        d = protobuf_to_dict(m)
+        assert d == {}
+
+        for field in m.DESCRIPTOR.fields:
+            d[field.name] = None
+
+        m2 = dict_to_protobuf(MessageOfTypes, d, ignore_none=True)
+        assert m == m2
+
+    def test_nested_ignore_none(self):
+        m = MessageOfTypes()
+        m.nestedMap['123'].req = '42'
+
+        d = protobuf_to_dict(m)
+        d['nestedMap']['123']['req'] = None
+
+        m2 = dict_to_protobuf(MessageOfTypes, d, ignore_none=True)
+        assert m2.nestedMap['123'].req == ''
+
     def populate_MessageOfTypes(self):
         m = MessageOfTypes()
         m.dubl = 1.7e+308
