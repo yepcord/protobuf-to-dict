@@ -57,11 +57,13 @@ def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=Fa
             result_dict[field.name] = dict()
             value_field = field.message_type.fields_by_name['value']
             type_callable = _get_field_value_adaptor(
-                pb, value_field, type_callable_map, use_enum_labels)
+                pb, value_field, type_callable_map,
+                use_enum_labels, including_default_value_fields)
             for k, v in value.items():
                 result_dict[field.name][k] = type_callable(v)
             continue
-        type_callable = _get_field_value_adaptor(pb, field, type_callable_map, use_enum_labels)
+        type_callable = _get_field_value_adaptor(pb, field, type_callable_map,
+                                                 use_enum_labels, including_default_value_fields)
         if field.label == FieldDescriptor.LABEL_REPEATED:
             type_callable = repeated(type_callable)
 
@@ -93,12 +95,15 @@ def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=Fa
     return result_dict
 
 
-def _get_field_value_adaptor(pb, field, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=False):
+def _get_field_value_adaptor(pb, field, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=False,
+                             including_default_value_fields=False):
     if field.type == FieldDescriptor.TYPE_MESSAGE:
         # recursively encode protobuf sub-message
         return lambda pb: protobuf_to_dict(
             pb, type_callable_map=type_callable_map,
-            use_enum_labels=use_enum_labels)
+            use_enum_labels=use_enum_labels,
+            including_default_value_fields=including_default_value_fields,
+        )
 
     if use_enum_labels and field.type == FieldDescriptor.TYPE_ENUM:
         return lambda value: enum_label_name(field, value)
