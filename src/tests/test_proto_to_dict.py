@@ -110,6 +110,19 @@ class Test(unittest.TestCase):
         m2 = dict_to_protobuf(MessageOfTypes, d)
         assert m == m2
 
+    def test_including_default_value_fields(self):
+        m = MessageOfTypes()
+        d = protobuf_to_dict(m)
+        assert d == {}
+
+        d = protobuf_to_dict(m, including_default_value_fields=True)
+        for field in m.DESCRIPTOR.fields:
+            if field.name != 'nested':
+                assert field.name in d, field.name
+
+        m2 = dict_to_protobuf(MessageOfTypes, d)
+        assert m == m2
+
     def populate_MessageOfTypes(self):
         m = MessageOfTypes()
         m.dubl = 1.7e+308

@@ -42,7 +42,14 @@ def enum_label_name(field, value):
     return field.enum_type.values_by_number[int(value)].name
 
 
-def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=False):
+def _is_map_entry(field):
+    return (field.type == FieldDescriptor.TYPE_MESSAGE and
+            field.message_type.has_options and
+            field.message_type.GetOptions().map_entry)
+
+
+def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=False,
+                     including_default_value_fields=False):
     result_dict = {}
     extensions = {}
     for field, value in pb.ListFields():
@@ -63,6 +70,23 @@ def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=Fa
             continue
 
         result_dict[field.name] = type_callable(value)
+
+    # Serialize default value if including_default_value_fields is True.
+    if including_default_value_fields:
+        for field in pb.DESCRIPTOR.fields:
+            # Singular message fields and oneof fields will not be affected.
+            if ((
+                    field.label != FieldDescriptor.LABEL_REPEATED and
+                    field.cpp_type == FieldDescriptor.CPPTYPE_MESSAGE) or
+                    field.containing_oneof):
+                continue
+            if field.name in result_dict:
+                # Skip the field which has been serailized already.
+                continue
+            if _is_map_entry(field):
+                result_dict[field.name] = {}
+            else:
+                result_dict[field.name] = field.default_value
 
     if extensions:
         result_dict[EXTENSION_CONTAINER] = extensions
