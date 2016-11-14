@@ -124,7 +124,7 @@ REVERSE_TYPE_CALLABLE_MAP = {
 }
 
 
-def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=REVERSE_TYPE_CALLABLE_MAP, strict=True):
+def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=REVERSE_TYPE_CALLABLE_MAP, strict=True, ignore_none=False):
     """Populates a protobuf model from a dictionary.
 
     :param pb_klass_or_instance: a protobuf message class, or an protobuf instance
@@ -134,12 +134,13 @@ def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=REVERSE_TYP
     :param dict type_callable_map: a mapping of protobuf types to callables for setting
        values on the target instance.
     :param bool strict: complain if keys in the map are not fields on the message.
+    :param bool strict: ignore None-values of fields, treat them as empty field
     """
     if isinstance(pb_klass_or_instance, Message):
         instance = pb_klass_or_instance
     else:
         instance = pb_klass_or_instance()
-    return _dict_to_protobuf(instance, values, type_callable_map, strict)
+    return _dict_to_protobuf(instance, values, type_callable_map, strict, ignore_none)
 
 
 def _get_field_mapping(pb, dict_value, strict):
@@ -170,30 +171,32 @@ def _get_field_mapping(pb, dict_value, strict):
     return field_mapping
 
 
-def _dict_to_protobuf(pb, value, type_callable_map, strict):
+def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
     fields = _get_field_mapping(pb, value, strict)
 
     for field, input_value, pb_value in fields:
+        if ignore_none and input_value is None:
+            continue
         if field.label == FieldDescriptor.LABEL_REPEATED:
             if field.message_type and field.message_type.has_options and field.message_type.GetOptions().map_entry:
                 value_field = field.message_type.fields_by_name['value']
                 for key, value in input_value.items():
                     if value_field.cpp_type == FieldDescriptor.CPPTYPE_MESSAGE:
-                        _dict_to_protobuf(getattr(pb, field.name)[key], value, type_callable_map, strict)
+                        _dict_to_protobuf(getattr(pb, field.name)[key], value, type_callable_map, strict, ignore_none)
                     else:
                         getattr(pb, field.name)[key] = value
                 continue
             for item in input_value:
                 if field.type == FieldDescriptor.TYPE_MESSAGE:
                     m = pb_value.add()
-                    _dict_to_protobuf(m, item, type_callable_map, strict)
+                    _dict_to_protobuf(m, item, type_callable_map, strict, ignore_none)
                 elif field.type == FieldDescriptor.TYPE_ENUM and isinstance(item, six.string_types):
                     pb_value.append(_string_to_enum(field, item))
                 else:
                     pb_value.append(item)
             continue
         if field.type == FieldDescriptor.TYPE_MESSAGE:
-            _dict_to_protobuf(pb_value, input_value, type_callable_map, strict)
+            _dict_to_protobuf(pb_value, input_value, type_callable_map, strict, ignore_none)
             continue
 
         if field.type in type_callable_map:
