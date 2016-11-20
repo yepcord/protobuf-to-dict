@@ -177,5 +177,5 @@ class Test(unittest.TestCase):
                 assert field.name in d, field.name
                 assert d[field.name] == getattr(m, field.name), (field.name, d[field.name])
         assert i > 0
-        assert m.byts == base64.b64decode(d['byts'])
+        assert m.byts == d['byts']
         assert d['nested'] == {'req': m.nested.req}
