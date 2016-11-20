@@ -115,10 +115,6 @@ def _get_field_value_adaptor(pb, field, type_callable_map=TYPE_CALLABLE_MAP, use
         pb.__class__.__name__, field.name, field.type))
 
 
-def get_bytes(value):
-    return base64.b64decode(value)
-
-
 REVERSE_TYPE_CALLABLE_MAP = {
 }
 
