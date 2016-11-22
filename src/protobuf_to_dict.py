@@ -29,7 +29,7 @@ TYPE_CALLABLE_MAP = {
     FieldDescriptor.TYPE_SFIXED64: int if six.PY3 else six.integer_types[1],
     FieldDescriptor.TYPE_BOOL: bool,
     FieldDescriptor.TYPE_STRING: six.text_type,
-    FieldDescriptor.TYPE_BYTES: lambda b: base64.b64encode(b),
+    FieldDescriptor.TYPE_BYTES: six.binary_type,
     FieldDescriptor.TYPE_ENUM: int,
 }
 
@@ -115,12 +115,7 @@ def _get_field_value_adaptor(pb, field, type_callable_map=TYPE_CALLABLE_MAP, use
         pb.__class__.__name__, field.name, field.type))
 
 
-def get_bytes(value):
-    return base64.b64decode(value)
-
-
 REVERSE_TYPE_CALLABLE_MAP = {
-    FieldDescriptor.TYPE_BYTES: get_bytes,
 }
 
 
