@@ -4,26 +4,45 @@ protobuf-to-dict is a small Python library for creating dicts from protocol
 buffers. It is intended to be used as an intermediate step before
 serialization (e.g. to JSON).
 
-## Installation
+# Installation
 
 Note: This is a fork. Install by pointing to this github repo.
 
-Use `pip install protobuf-to-dict` or `python setup.py install`.
+For example:
 
-## Example
+`pip install git+ssh://git@github.com/wearefair/protobuf-to-dict`
+
+# Example
 
 Given the `google.protobuf.message.Message` subclass `MyMessage`:
 
 ```python
->>> from protobuf_to_dict import protobuf_to_dict
+>>> from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf
 >>> my_message = MyMessage()
 >>> # pb_my_message is a protobuf string
 >>> my_message.ParseFromString(pb_my_message)
->>> protobuf_to_dict(my_message)
+>>> my_message_dict = protobuf_to_dict(my_message)
+>>> print(my_message_dict)
 {'message': 'Hello'}
+>>> msg = dict_to_protobuf(MyMessage, values=my_message_dict)
+>>> assert msg == my_message
+True
 ```
 
-## Caveats
+# Datetime conversion
+
+This package automatically converts Python's datetime objects to Google's Timestamp and vice-versa.
+If you want to manually do the conversion, the functions are:
+
+```py
+from protobuf_to_dict import datetime_to_timestamp, timestamp_to_datetime
+
+timestamped = datetime_to_timestamp(sample_datetime)
+result_sample_datetime = timestamp_to_datetime(timestamped)
+assert sample_datetime == result_sample_datetime
+```
+
+##Caveats
 
 This library grew out of the desire to serialize a protobuf-encoded message to
 [JSON](http://json.org/). As JSON has no built-in binary type (all strings in
@@ -55,7 +74,7 @@ string labels instead, pass `use_enum_labels=True` into `protobuf_to_dict`:
 >>> protobuf_to_dict(my_message, use_enum_labels=True)
 ```
 
-## Unit testing
+# Testing
 
 `pytest tests/`
 
@@ -63,21 +82,21 @@ To regenerate `src/tests/sample_pb2.py`:
 
 run the `compile.sh` file inside the tests folder.
 
-## attention
+# attention
 Prorobuf 3.0.0 has supported json now.
 Check https://developers.google.com/protocol-buffers/docs/reference/python/ for more details.
 
 
-## Authors
+# Authors
 
 protobuf-to-dict is written and maintained by
 [Ben Hodgson](http://benhodgson.com/), with significant contributions from
 [Nino Walker](https://github.com/ninowalker),
 [Jonathan Klaassen](https://github.com/jaklaassen), and
 [Tristram Gräbener](http://blog.tristramg.eu/).
+[Sep Dehpour](http://zepworks.com)
 
-
-## (Un)license
+# (Un)license
 
 This is free and unencumbered software released into the public domain.
 
