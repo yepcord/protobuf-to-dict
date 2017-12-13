@@ -1,21 +1,3 @@
-# attention
-Prorobuf 3.0.0 has supported json now.
-Check https://developers.google.com/protocol-buffers/docs/reference/python/ for more details.
-
-# protobuf3-to-dict
-
-I upgraded it to support PY3 and PB3. As Ben hasn't updated this library any more, I renamed it to
-protobuf3-to-dict. Now u can install it with
-
-    pip install protobuf3-to-dict
-      
-or
-
-    easy_install protobuf3-to-dict
-
-
------------old readme by Ben-------------
-
 # protobuf-to-dict
 
 protobuf-to-dict is a small Python library for creating dicts from protocol
@@ -23,6 +5,8 @@ buffers. It is intended to be used as an intermediate step before
 serialization (e.g. to JSON).
 
 ## Installation
+
+Note: This is a fork. Install by pointing to this github repo.
 
 Use `pip install protobuf-to-dict` or `python setup.py install`.
 
@@ -73,17 +57,16 @@ string labels instead, pass `use_enum_labels=True` into `protobuf_to_dict`:
 
 ## Unit testing
 
-Tests are under `src/tests/`.
-
-```sh
-$ python setup.py nosetests
-```
+`pytest tests/`
 
 To regenerate `src/tests/sample_pb2.py`:
 
-```sh
-$ protoc --python_out=src -Isrc src/tests/sample.proto 
-```
+run the `compile.sh` file inside the tests folder.
+
+## attention
+Prorobuf 3.0.0 has supported json now.
+Check https://developers.google.com/protocol-buffers/docs/reference/python/ for more details.
+
 
 ## Authors
 

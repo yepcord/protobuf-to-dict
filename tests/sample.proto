@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "google/protobuf/timestamp.proto";
 
 package tests;
 
@@ -37,4 +38,22 @@ message MessageOfTypes {
 		B = 1;
 		C = 2;
 	}
+}
+
+enum Status {
+    OK = 0;
+    ERROR = 1;
+}
+
+message AssetTransfer {
+    int32 id = 1;
+    string vehicle_id = 2;
+    google.protobuf.Timestamp transacted_at = 3;
+    string buyer_id = 4;
+    Status status = 5;
+}
+
+
+message AssetTransfers {
+    repeated AssetTransfer transfers = 1;
 }

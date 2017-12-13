@@ -1,14 +1,25 @@
 # -*- coding:utf-8 -*-
-import base64
-
 import six
+import datetime
 
 from google.protobuf.message import Message
 from google.protobuf.descriptor import FieldDescriptor
-
+from google.protobuf.timestamp_pb2 import Timestamp
 
 __all__ = ["protobuf_to_dict", "TYPE_CALLABLE_MAP", "dict_to_protobuf",
            "REVERSE_TYPE_CALLABLE_MAP"]
+
+Timestamp_type_name = 'Timestamp'
+
+
+def datetime_to_timestamp(dt):
+    ts = Timestamp()
+    ts.FromDatetime(dt)
+    return ts
+
+def timestamp_to_datetime(ts):
+    dt = ts.ToDatetime()
+    return dt
 
 
 EXTENSION_CONTAINER = '___X'
@@ -97,6 +108,9 @@ def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=Fa
 
 def _get_field_value_adaptor(pb, field, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=False,
                              including_default_value_fields=False):
+
+    if field.message_type and field.message_type.name == Timestamp_type_name:
+        return timestamp_to_datetime
     if field.type == FieldDescriptor.TYPE_MESSAGE:
         # recursively encode protobuf sub-message
         return lambda pb: protobuf_to_dict(
@@ -190,7 +204,13 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
                 else:
                     pb_value.append(item)
             continue
-        if field.type == FieldDescriptor.TYPE_MESSAGE:
+        if isinstance(input_value, datetime.datetime):
+            input_value = datetime_to_timestamp(input_value)
+            # Instead of setattr we need to use CopyFrom for composite fields
+            # Otherwise we will get AttributeError: Assignment not allowed to composite field “field name” in protocol message object
+            getattr(pb, field.name).CopyFrom(input_value)
+            continue
+        elif field.type == FieldDescriptor.TYPE_MESSAGE:
             _dict_to_protobuf(pb_value, input_value, type_callable_map, strict, ignore_none)
             continue
 

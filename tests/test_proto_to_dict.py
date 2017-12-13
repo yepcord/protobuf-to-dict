@@ -1,8 +1,7 @@
 # -*- coding:utf-8 -*-
-import base64
 import unittest
 
-import nose.tools
+import pytest
 
 from tests.sample_pb2 import MessageOfTypes
 from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf
@@ -28,7 +27,7 @@ class Test(unittest.TestCase):
         assert m == m2
 
         d['enm'] = 'MEOW'
-        with nose.tools.assert_raises(KeyError):
+        with pytest.raises(KeyError):
             dict_to_protobuf(MessageOfTypes, d)
 
         d['enm'] = 'A'
@@ -36,7 +35,7 @@ class Test(unittest.TestCase):
         dict_to_protobuf(MessageOfTypes, d)
 
         d['enmRepeated'] = ['CAT']
-        with nose.tools.assert_raises(KeyError):
+        with pytest.raises(KeyError):
             dict_to_protobuf(MessageOfTypes, d)
 
     def test_repeated_enum(self):
@@ -49,7 +48,7 @@ class Test(unittest.TestCase):
         assert m == m2
 
         d['enmRepeated'] = ['MEOW']
-        with nose.tools.assert_raises(KeyError):
+        with pytest.raises(KeyError):
             dict_to_protobuf(MessageOfTypes, d)
 
     def test_nested_repeated(self):
@@ -90,7 +89,7 @@ class Test(unittest.TestCase):
         m = self.populate_MessageOfTypes()
         d = protobuf_to_dict(m)
         d['meow'] = 1
-        with nose.tools.assert_raises(KeyError):
+        with pytest.raises(KeyError):
             m2 = dict_to_protobuf(MessageOfTypes, d)
         m2 = dict_to_protobuf(MessageOfTypes, d, strict=False)
         assert m == m2
