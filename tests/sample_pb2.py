@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='sample.proto',
   package='tests',
   syntax='proto3',
-  serialized_pb=_b('\n\x0csample.proto\x12\x05tests\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd4\x05\n\x0eMessageOfTypes\x12\x0c\n\x04\x64ubl\x18\x01 \x01(\x01\x12\x0c\n\x04\x66lot\x18\x02 \x01(\x02\x12\x0b\n\x03i32\x18\x03 \x01(\x05\x12\x0b\n\x03i64\x18\x04 \x01(\x03\x12\x0c\n\x04ui32\x18\x05 \x01(\r\x12\x0c\n\x04ui64\x18\x06 \x01(\x04\x12\x0c\n\x04si32\x18\x07 \x01(\x11\x12\x0c\n\x04si64\x18\x08 \x01(\x12\x12\x0b\n\x03\x66\x33\x32\x18\t \x01(\x07\x12\x0b\n\x03\x66\x36\x34\x18\n \x01(\x06\x12\x0c\n\x04sf32\x18\x0b \x01(\x0f\x12\x0c\n\x04sf64\x18\x0c \x01(\x10\x12\x0b\n\x03\x62ol\x18\r \x01(\x08\x12\r\n\x05strng\x18\x0e \x01(\t\x12\x0c\n\x04\x62yts\x18\x0f \x01(\x0c\x12\x30\n\x06nested\x18\x10 \x01(\x0b\x32 .tests.MessageOfTypes.NestedType\x12\'\n\x03\x65nm\x18\x11 \x01(\x0e\x32\x1a.tests.MessageOfTypes.Enum\x12\x38\n\x0enestedRepeated\x18\x12 \x03(\x0b\x32 .tests.MessageOfTypes.NestedType\x12/\n\x0b\x65nmRepeated\x18\x13 \x03(\x0e\x32\x1a.tests.MessageOfTypes.Enum\x12\x37\n\tsimpleMap\x18\x14 \x03(\x0b\x32$.tests.MessageOfTypes.SimpleMapEntry\x12\x37\n\tnestedMap\x18\x15 \x03(\x0b\x32$.tests.MessageOfTypes.NestedMapEntry\x1a\x30\n\x0eSimpleMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x02:\x02\x38\x01\x1aR\n\x0eNestedMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .tests.MessageOfTypes.NestedType:\x02\x38\x01\x1a\x19\n\nNestedType\x12\x0b\n\x03req\x18\x01 \x01(\t\"\x1b\n\x04\x45num\x12\x05\n\x01\x41\x10\x00\x12\x05\n\x01\x42\x10\x01\x12\x05\n\x01\x43\x10\x02\"\x93\x01\n\rAssetTransfer\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x12\n\nvehicle_id\x18\x02 \x01(\t\x12\x31\n\rtransacted_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08\x62uyer_id\x18\x04 \x01(\t\x12\x1d\n\x06status\x18\x05 \x01(\x0e\x32\r.tests.Status\"9\n\x0e\x41ssetTransfers\x12\'\n\ttransfers\x18\x01 \x03(\x0b\x32\x14.tests.AssetTransfer*\x1b\n\x06Status\x12\x06\n\x02OK\x10\x00\x12\t\n\x05\x45RROR\x10\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x0csample.proto\x12\x05tests\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd4\x05\n\x0eMessageOfTypes\x12\x0c\n\x04\x64ubl\x18\x01 \x01(\x01\x12\x0c\n\x04\x66lot\x18\x02 \x01(\x02\x12\x0b\n\x03i32\x18\x03 \x01(\x05\x12\x0b\n\x03i64\x18\x04 \x01(\x03\x12\x0c\n\x04ui32\x18\x05 \x01(\r\x12\x0c\n\x04ui64\x18\x06 \x01(\x04\x12\x0c\n\x04si32\x18\x07 \x01(\x11\x12\x0c\n\x04si64\x18\x08 \x01(\x12\x12\x0b\n\x03\x66\x33\x32\x18\t \x01(\x07\x12\x0b\n\x03\x66\x36\x34\x18\n \x01(\x06\x12\x0c\n\x04sf32\x18\x0b \x01(\x0f\x12\x0c\n\x04sf64\x18\x0c \x01(\x10\x12\x0b\n\x03\x62ol\x18\r \x01(\x08\x12\r\n\x05strng\x18\x0e \x01(\t\x12\x0c\n\x04\x62yts\x18\x0f \x01(\x0c\x12\x30\n\x06nested\x18\x10 \x01(\x0b\x32 .tests.MessageOfTypes.NestedType\x12\'\n\x03\x65nm\x18\x11 \x01(\x0e\x32\x1a.tests.MessageOfTypes.Enum\x12\x38\n\x0enestedRepeated\x18\x12 \x03(\x0b\x32 .tests.MessageOfTypes.NestedType\x12/\n\x0b\x65nmRepeated\x18\x13 \x03(\x0e\x32\x1a.tests.MessageOfTypes.Enum\x12\x37\n\tsimpleMap\x18\x14 \x03(\x0b\x32$.tests.MessageOfTypes.SimpleMapEntry\x12\x37\n\tnestedMap\x18\x15 \x03(\x0b\x32$.tests.MessageOfTypes.NestedMapEntry\x1a\x30\n\x0eSimpleMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x02:\x02\x38\x01\x1aR\n\x0eNestedMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .tests.MessageOfTypes.NestedType:\x02\x38\x01\x1a\x19\n\nNestedType\x12\x0b\n\x03req\x18\x01 \x01(\t\"\x1b\n\x04\x45num\x12\x05\n\x01\x41\x10\x00\x12\x05\n\x01\x42\x10\x01\x12\x05\n\x01\x43\x10\x02\"t\n\x03Obj\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0f\n\x07item_id\x18\x02 \x01(\t\x12\x31\n\rtransacted_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1d\n\x06status\x18\x05 \x01(\x0e\x32\r.tests.Status\"#\n\x04Objs\x12\x1b\n\x07objects\x18\x01 \x03(\x0b\x32\n.tests.Obj*\x1b\n\x06Status\x12\x06\n\x02OK\x10\x00\x12\t\n\x05\x45RROR\x10\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -42,8 +42,8 @@ _STATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=992,
-  serialized_end=1019,
+  serialized_start=938,
+  serialized_end=965,
 )
 _sym_db.RegisterEnumDescriptor(_STATUS)
 
@@ -355,43 +355,36 @@ _MESSAGEOFTYPES = _descriptor.Descriptor(
 )
 
 
-_ASSETTRANSFER = _descriptor.Descriptor(
-  name='AssetTransfer',
-  full_name='tests.AssetTransfer',
+_OBJ = _descriptor.Descriptor(
+  name='Obj',
+  full_name='tests.Obj',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='id', full_name='tests.AssetTransfer.id', index=0,
+      name='id', full_name='tests.Obj.id', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='vehicle_id', full_name='tests.AssetTransfer.vehicle_id', index=1,
+      name='item_id', full_name='tests.Obj.item_id', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='transacted_at', full_name='tests.AssetTransfer.transacted_at', index=2,
+      name='transacted_at', full_name='tests.Obj.transacted_at', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='buyer_id', full_name='tests.AssetTransfer.buyer_id', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='status', full_name='tests.AssetTransfer.status', index=4,
+      name='status', full_name='tests.Obj.status', index=3,
       number=5, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -409,20 +402,20 @@ _ASSETTRANSFER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=784,
-  serialized_end=931,
+  serialized_start=783,
+  serialized_end=899,
 )
 
 
-_ASSETTRANSFERS = _descriptor.Descriptor(
-  name='AssetTransfers',
-  full_name='tests.AssetTransfers',
+_OBJS = _descriptor.Descriptor(
+  name='Objs',
+  full_name='tests.Objs',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='transfers', full_name='tests.AssetTransfers.transfers', index=0,
+      name='objects', full_name='tests.Objs.objects', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -440,8 +433,8 @@ _ASSETTRANSFERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=933,
-  serialized_end=990,
+  serialized_start=901,
+  serialized_end=936,
 )
 
 _MESSAGEOFTYPES_SIMPLEMAPENTRY.containing_type = _MESSAGEOFTYPES
@@ -455,12 +448,12 @@ _MESSAGEOFTYPES.fields_by_name['enmRepeated'].enum_type = _MESSAGEOFTYPES_ENUM
 _MESSAGEOFTYPES.fields_by_name['simpleMap'].message_type = _MESSAGEOFTYPES_SIMPLEMAPENTRY
 _MESSAGEOFTYPES.fields_by_name['nestedMap'].message_type = _MESSAGEOFTYPES_NESTEDMAPENTRY
 _MESSAGEOFTYPES_ENUM.containing_type = _MESSAGEOFTYPES
-_ASSETTRANSFER.fields_by_name['transacted_at'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_ASSETTRANSFER.fields_by_name['status'].enum_type = _STATUS
-_ASSETTRANSFERS.fields_by_name['transfers'].message_type = _ASSETTRANSFER
+_OBJ.fields_by_name['transacted_at'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_OBJ.fields_by_name['status'].enum_type = _STATUS
+_OBJS.fields_by_name['objects'].message_type = _OBJ
 DESCRIPTOR.message_types_by_name['MessageOfTypes'] = _MESSAGEOFTYPES
-DESCRIPTOR.message_types_by_name['AssetTransfer'] = _ASSETTRANSFER
-DESCRIPTOR.message_types_by_name['AssetTransfers'] = _ASSETTRANSFERS
+DESCRIPTOR.message_types_by_name['Obj'] = _OBJ
+DESCRIPTOR.message_types_by_name['Objs'] = _OBJS
 DESCRIPTOR.enum_types_by_name['Status'] = _STATUS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -495,19 +488,19 @@ _sym_db.RegisterMessage(MessageOfTypes.SimpleMapEntry)
 _sym_db.RegisterMessage(MessageOfTypes.NestedMapEntry)
 _sym_db.RegisterMessage(MessageOfTypes.NestedType)
 
-AssetTransfer = _reflection.GeneratedProtocolMessageType('AssetTransfer', (_message.Message,), dict(
-  DESCRIPTOR = _ASSETTRANSFER,
+Obj = _reflection.GeneratedProtocolMessageType('Obj', (_message.Message,), dict(
+  DESCRIPTOR = _OBJ,
   __module__ = 'sample_pb2'
-  # @@protoc_insertion_point(class_scope:tests.AssetTransfer)
+  # @@protoc_insertion_point(class_scope:tests.Obj)
   ))
-_sym_db.RegisterMessage(AssetTransfer)
+_sym_db.RegisterMessage(Obj)
 
-AssetTransfers = _reflection.GeneratedProtocolMessageType('AssetTransfers', (_message.Message,), dict(
-  DESCRIPTOR = _ASSETTRANSFERS,
+Objs = _reflection.GeneratedProtocolMessageType('Objs', (_message.Message,), dict(
+  DESCRIPTOR = _OBJS,
   __module__ = 'sample_pb2'
-  # @@protoc_insertion_point(class_scope:tests.AssetTransfers)
+  # @@protoc_insertion_point(class_scope:tests.Objs)
   ))
-_sym_db.RegisterMessage(AssetTransfers)
+_sym_db.RegisterMessage(Objs)
 
 
 _MESSAGEOFTYPES_SIMPLEMAPENTRY.has_options = True

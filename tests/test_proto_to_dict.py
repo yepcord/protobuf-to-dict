@@ -1,13 +1,15 @@
 # -*- coding:utf-8 -*-
-import unittest
-
+import datetime
 import pytest
 
+from tests import sample_pb2
 from tests.sample_pb2 import MessageOfTypes
-from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf
+from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf, datetime_to_timestamp, timestamp_to_datetime
+
+sample_datetime = datetime.datetime.strptime('2011-01-21 02:37:21', '%Y-%m-%d %H:%M:%S')
 
 
-class Test(unittest.TestCase):
+class TestProtoConvertor:
     def test_basics(self):
         m = self.populate_MessageOfTypes()
         d = protobuf_to_dict(m)
@@ -178,3 +180,25 @@ class Test(unittest.TestCase):
         assert i > 0
         assert m.byts == d['byts']
         assert d['nested'] == {'req': m.nested.req}
+
+
+
+
+class TestDateTime:
+
+    def test_datetime_to_timestamp_and_back(self):
+        timestamped = datetime_to_timestamp(sample_datetime)
+        result_sample_datetime = timestamp_to_datetime(timestamped)
+        assert sample_datetime == result_sample_datetime
+
+    def test_pb_convert_to_dict_with_datetime_and_back(self):
+        now = datetime.datetime.utcnow()
+        timestamp = datetime_to_timestamp(now)
+        obj1 = sample_pb2.Obj(item_id="item id", transacted_at=timestamp)
+
+        pb_dict = protobuf_to_dict(obj1)
+        assert pb_dict['transacted_at'] == now
+
+        obj1_again = dict_to_protobuf(sample_pb2.Obj, values=pb_dict)
+        assert obj1 == obj1_again
+
