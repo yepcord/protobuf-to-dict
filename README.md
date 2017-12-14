@@ -42,6 +42,70 @@ result_sample_datetime = timestamp_to_datetime(timestamped)
 assert sample_datetime == result_sample_datetime
 ```
 
+# Getting all fields, field names and options of a protobuf class
+
+For example in the tests folder you can find sample.proto:
+
+```
+message Obj {
+    int32 id = 1 [(is_optional) = true];
+    string item_id = 2;
+    google.protobuf.Timestamp transacted_at = 3;
+    Status status = 5;
+}
+```
+
+Then you can:
+
+```py
+>>> from protobuf_to_dict import get_field_names_and_options
+>>> for field, field_name, options in get_field_names_and_options(sample_pb2.Obj):
+...     print('name: {}, options: {}'.format(field_name, options))
+
+name: id, options: {'is_optional': True}
+name: item_id, options: {}
+name: transacted_at, options: {}
+name: status, options: {}
+```
+
+# Validation for required fields
+
+Protobuf 3 does not have a notion of required vs. optional fields. Everything is optional. However if you need some sort of validation before converting your dictionary to a protobuf object, first of all you need to add an option to your protobuf messages that is called `is_optional`.
+
+For example in the tests folder you can find sample.proto:
+
+```
+message Obj {
+    int32 id = 1 [(is_optional) = true];
+    string item_id = 2;
+    google.protobuf.Timestamp transacted_at = 3;
+    Status status = 5;
+}
+```
+
+Then you can validate if a dictionary has all the fields you need:
+
+```py
+>>> import datetime
+>>> from protobuf_to_dict import validate_dict_for_required_pb_fields
+>>>
+>>> dic = {'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status':0}
+>>> from tests import sample_pb2
+>>> validate_dict_for_required_pb_fields(pb=sample_pb2.Obj, dic=dic)
+```
+
+But if you have missing fields:
+
+```py
+>>> dic = {'item_id': 2}
+>>> validate_dict_for_required_pb_fields(pb=sample_pb2.Obj, dic=dic)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/Users/sepdahpour/Workspace/tools/protobuf-to-dict/protobuf_to_dict/convertor.py", line 274, in validate_dict_for_required_pb_fields
+    raise FieldsMissing('Missing fields: {}'.format(', '.join(missing_fields)))
+protobuf_to_dict.convertor.FieldsMissing: Missing fields: transacted_at, status
+````
+
 ##Caveats
 
 This library grew out of the desire to serialize a protobuf-encoded message to

@@ -236,3 +236,39 @@ def _string_to_enum(field, input_value):
     except KeyError:
         raise KeyError("`%s` is not a valid value for field `%s`" % (input_value, field.name))
     return input_value
+
+
+
+def get_field_names_and_options(pb):
+    """
+    Return a tuple of field names and options.
+    """
+    desc = pb.DESCRIPTOR
+
+    for field in desc.fields:
+        field_name = field.name
+        options_dict = {}
+        if field.has_options:
+            options = field.GetOptions()
+            for subfield, value in options.ListFields():
+                options_dict[subfield.name] = value
+        yield field, field_name, options_dict
+
+
+class FieldsMissing(ValueError):
+    pass
+
+
+def validate_dict_for_required_pb_fields(pb, dic):
+    """
+    Validate that the dictionary has all the required fields for creating a protobuffer object
+    from pb class. If a field is missing, raise FieldsMissing.
+    In order to mark a field as optional, add [(is_optional) = true] to the field.
+    Take a look at the tests for an example.
+    """
+    missing_fields = []
+    for field, field_name, field_options in get_field_names_and_options(pb):
+        if not field_options.get('is_optional', False) and field_name not in dic:
+            missing_fields.append(field_name)
+    if missing_fields:
+        raise FieldsMissing('Missing fields: {}'.format(', '.join(missing_fields)))

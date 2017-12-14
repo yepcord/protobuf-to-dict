@@ -1,7 +1,12 @@
 syntax = "proto3";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/descriptor.proto";
 
 package tests;
+
+extend google.protobuf.FieldOptions {
+    bool is_optional = 50004;
+}
 
 // protoc --python_out=src -Isrc src/tests/sample.proto
 
@@ -46,7 +51,7 @@ enum Status {
 }
 
 message Obj {
-    int32 id = 1;
+    int32 id = 1 [(is_optional) = true];
     string item_id = 2;
     google.protobuf.Timestamp transacted_at = 3;
     Status status = 5;

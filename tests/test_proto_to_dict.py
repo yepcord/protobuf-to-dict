@@ -4,7 +4,9 @@ import pytest
 
 from tests import sample_pb2
 from tests.sample_pb2 import MessageOfTypes
-from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf, datetime_to_timestamp, timestamp_to_datetime
+from protobuf_to_dict import (protobuf_to_dict, dict_to_protobuf, datetime_to_timestamp,
+    timestamp_to_datetime, get_field_names_and_options, validate_dict_for_required_pb_fields,
+    FieldsMissing)
 
 sample_datetime = datetime.datetime.strptime('2011-01-21 02:37:21', '%Y-%m-%d %H:%M:%S')
 
@@ -182,8 +184,6 @@ class TestProtoConvertor:
         assert d['nested'] == {'req': m.nested.req}
 
 
-
-
 class TestDateTime:
 
     def test_datetime_to_timestamp_and_back(self):
@@ -202,3 +202,24 @@ class TestDateTime:
         obj1_again = dict_to_protobuf(sample_pb2.Obj, values=pb_dict)
         assert obj1 == obj1_again
 
+
+class TestOptions:
+
+    def test_get_field_name_and_options(self):
+        for field, field_name, field_options in get_field_names_and_options(sample_pb2.Obj):
+            if field_name == 'id':
+                assert field_options == {'is_optional': True}
+
+    @pytest.mark.parametrize("test_input", [
+        {'id': 1, 'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status':0},
+        {'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status':0},
+    ])
+    def test_validate_dict_for_required_pb_fields_has_all_required_fields(self, test_input):
+        validate_dict_for_required_pb_fields(pb=sample_pb2.Obj, dic=test_input)
+
+    def test_validate_dict_for_required_pb_fields_has_missing_required_fields(self):
+        dic = {'id': 1, 'item_id': 2}
+        with pytest.raises(FieldsMissing) as e:
+            validate_dict_for_required_pb_fields(pb=sample_pb2.Obj, dic=dic)
+
+        assert str(e.value) == 'Missing fields: transacted_at, status'
