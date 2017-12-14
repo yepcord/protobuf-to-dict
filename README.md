@@ -101,7 +101,7 @@ But if you have missing fields:
 >>> validate_dict_for_required_pb_fields(pb=sample_pb2.Obj, dic=dic)
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-  File "/Users/sepdahpour/Workspace/tools/protobuf-to-dict/protobuf_to_dict/convertor.py", line 274, in validate_dict_for_required_pb_fields
+  File "protobuf-to-dict/protobuf_to_dict/convertor.py", line 274, in validate_dict_for_required_pb_fields
     raise FieldsMissing('Missing fields: {}'.format(', '.join(missing_fields)))
 protobuf_to_dict.convertor.FieldsMissing: Missing fields: transacted_at, status
 ````
