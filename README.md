@@ -37,8 +37,8 @@ If you want to manually do the conversion, the functions are:
 ```py
 from protobuf_to_dict import datetime_to_timestamp, timestamp_to_datetime
 
-timestamped = datetime_to_timestamp(sample_datetime)
-result_sample_datetime = timestamp_to_datetime(timestamped)
+timestamp = datetime_to_timestamp(sample_datetime)
+result_sample_datetime = timestamp_to_datetime(timestamp)
 assert sample_datetime == result_sample_datetime
 ```
 

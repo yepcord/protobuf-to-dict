@@ -4,9 +4,10 @@ import pytest
 
 from tests import sample_pb2
 from tests.sample_pb2 import MessageOfTypes
-from protobuf_to_dict import (protobuf_to_dict, dict_to_protobuf, datetime_to_timestamp,
-    timestamp_to_datetime, get_field_names_and_options, validate_dict_for_required_pb_fields,
-    FieldsMissing)
+from protobuf_to_dict import (
+    protobuf_to_dict, dict_to_protobuf, datetime_to_timestamp,
+    timestamp_to_datetime, get_field_names_and_options,
+    validate_dict_for_required_pb_fields, FieldsMissing)
 
 sample_datetime = datetime.datetime.strptime('2011-01-21 02:37:21', '%Y-%m-%d %H:%M:%S')
 
@@ -147,7 +148,7 @@ class TestProtoConvertor:
         m2 = dict_to_protobuf(MessageOfTypes, d, ignore_none=True)
         assert m2.nestedMap['123'].req == ''
 
-    def populate_MessageOfTypes(self):
+    def populate_MessageOfTypes(self):  # NOQA
         m = MessageOfTypes()
         m.dubl = 1.7e+308
         m.flot = 3.4e+038
@@ -187,8 +188,8 @@ class TestProtoConvertor:
 class TestDateTime:
 
     def test_datetime_to_timestamp_and_back(self):
-        timestamped = datetime_to_timestamp(sample_datetime)
-        result_sample_datetime = timestamp_to_datetime(timestamped)
+        timestamp = datetime_to_timestamp(sample_datetime)
+        result_sample_datetime = timestamp_to_datetime(timestamp)
         assert sample_datetime == result_sample_datetime
 
     def test_pb_convert_to_dict_with_datetime_and_back(self):
@@ -211,8 +212,8 @@ class TestOptions:
                 assert field_options == {'is_optional': True}
 
     @pytest.mark.parametrize("test_input", [
-        {'id': 1, 'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status':0},
-        {'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status':0},
+        {'id': 1, 'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status': 0},
+        {'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status': 0},
     ])
     def test_validate_dict_for_required_pb_fields_has_all_required_fields(self, test_input):
         validate_dict_for_required_pb_fields(pb=sample_pb2.Obj, dic=test_input)
