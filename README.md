@@ -70,7 +70,7 @@ name: status, options: {}
 
 # Validation for required fields
 
-Protobuf 3 does not have a notion of required vs. optional fields. Everything is optional. However if you need some sort of validation before converting your dictionary to a protobuf object, first of all you need to add an option to your protobuf messages that is called `is_optional`.
+Protobuf 3 does not have a notion of required vs. optional fields. Everything is optional. However if you need some sort of validation before converting your dictionary to a protobuf object, first of all you need to add an option to your protobuf messages that is called `is_optional`. Note that this is different than the `optional` keyword in Prorobuf 2. This is an "option":
 
 For example in the tests folder you can find sample.proto:
 
