@@ -1,14 +1,25 @@
 # -*- coding:utf-8 -*-
-import base64
-
 import six
+import datetime
 
 from google.protobuf.message import Message
 from google.protobuf.descriptor import FieldDescriptor
-
+from google.protobuf.timestamp_pb2 import Timestamp
 
 __all__ = ["protobuf_to_dict", "TYPE_CALLABLE_MAP", "dict_to_protobuf",
            "REVERSE_TYPE_CALLABLE_MAP"]
+
+Timestamp_type_name = 'Timestamp'
+
+
+def datetime_to_timestamp(dt):
+    ts = Timestamp()
+    ts.FromDatetime(dt)
+    return ts
+
+def timestamp_to_datetime(ts):
+    dt = ts.ToDatetime()
+    return dt
 
 
 EXTENSION_CONTAINER = '___X'
@@ -97,6 +108,9 @@ def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=Fa
 
 def _get_field_value_adaptor(pb, field, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=False,
                              including_default_value_fields=False):
+
+    if field.message_type and field.message_type.name == Timestamp_type_name:
+        return timestamp_to_datetime
     if field.type == FieldDescriptor.TYPE_MESSAGE:
         # recursively encode protobuf sub-message
         return lambda pb: protobuf_to_dict(
@@ -190,7 +204,13 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
                 else:
                     pb_value.append(item)
             continue
-        if field.type == FieldDescriptor.TYPE_MESSAGE:
+        if isinstance(input_value, datetime.datetime):
+            input_value = datetime_to_timestamp(input_value)
+            # Instead of setattr we need to use CopyFrom for composite fields
+            # Otherwise we will get AttributeError: Assignment not allowed to composite field “field name” in protocol message object
+            getattr(pb, field.name).CopyFrom(input_value)
+            continue
+        elif field.type == FieldDescriptor.TYPE_MESSAGE:
             _dict_to_protobuf(pb_value, input_value, type_callable_map, strict, ignore_none)
             continue
 
@@ -216,3 +236,39 @@ def _string_to_enum(field, input_value):
     except KeyError:
         raise KeyError("`%s` is not a valid value for field `%s`" % (input_value, field.name))
     return input_value
+
+
+
+def get_field_names_and_options(pb):
+    """
+    Return a tuple of field names and options.
+    """
+    desc = pb.DESCRIPTOR
+
+    for field in desc.fields:
+        field_name = field.name
+        options_dict = {}
+        if field.has_options:
+            options = field.GetOptions()
+            for subfield, value in options.ListFields():
+                options_dict[subfield.name] = value
+        yield field, field_name, options_dict
+
+
+class FieldsMissing(ValueError):
+    pass
+
+
+def validate_dict_for_required_pb_fields(pb, dic):
+    """
+    Validate that the dictionary has all the required fields for creating a protobuffer object
+    from pb class. If a field is missing, raise FieldsMissing.
+    In order to mark a field as optional, add [(is_optional) = true] to the field.
+    Take a look at the tests for an example.
+    """
+    missing_fields = []
+    for field, field_name, field_options in get_field_names_and_options(pb):
+        if not field_options.get('is_optional', False) and field_name not in dic:
+            missing_fields.append(field_name)
+    if missing_fields:
+        raise FieldsMissing('Missing fields: {}'.format(', '.join(missing_fields)))

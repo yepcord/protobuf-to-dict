@@ -1,14 +1,18 @@
 # -*- coding:utf-8 -*-
-import base64
-import unittest
+import datetime
+import pytest
 
-import nose.tools
-
+from tests import sample_pb2
 from tests.sample_pb2 import MessageOfTypes
-from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf
+from protobuf_to_dict import (
+    protobuf_to_dict, dict_to_protobuf, datetime_to_timestamp,
+    timestamp_to_datetime, get_field_names_and_options,
+    validate_dict_for_required_pb_fields, FieldsMissing)
+
+sample_datetime = datetime.datetime.strptime('2011-01-21 02:37:21', '%Y-%m-%d %H:%M:%S')
 
 
-class Test(unittest.TestCase):
+class TestProtoConvertor:
     def test_basics(self):
         m = self.populate_MessageOfTypes()
         d = protobuf_to_dict(m)
@@ -28,7 +32,7 @@ class Test(unittest.TestCase):
         assert m == m2
 
         d['enm'] = 'MEOW'
-        with nose.tools.assert_raises(KeyError):
+        with pytest.raises(KeyError):
             dict_to_protobuf(MessageOfTypes, d)
 
         d['enm'] = 'A'
@@ -36,7 +40,7 @@ class Test(unittest.TestCase):
         dict_to_protobuf(MessageOfTypes, d)
 
         d['enmRepeated'] = ['CAT']
-        with nose.tools.assert_raises(KeyError):
+        with pytest.raises(KeyError):
             dict_to_protobuf(MessageOfTypes, d)
 
     def test_repeated_enum(self):
@@ -49,7 +53,7 @@ class Test(unittest.TestCase):
         assert m == m2
 
         d['enmRepeated'] = ['MEOW']
-        with nose.tools.assert_raises(KeyError):
+        with pytest.raises(KeyError):
             dict_to_protobuf(MessageOfTypes, d)
 
     def test_nested_repeated(self):
@@ -90,7 +94,7 @@ class Test(unittest.TestCase):
         m = self.populate_MessageOfTypes()
         d = protobuf_to_dict(m)
         d['meow'] = 1
-        with nose.tools.assert_raises(KeyError):
+        with pytest.raises(KeyError):
             m2 = dict_to_protobuf(MessageOfTypes, d)
         m2 = dict_to_protobuf(MessageOfTypes, d, strict=False)
         assert m == m2
@@ -144,7 +148,7 @@ class Test(unittest.TestCase):
         m2 = dict_to_protobuf(MessageOfTypes, d, ignore_none=True)
         assert m2.nestedMap['123'].req == ''
 
-    def populate_MessageOfTypes(self):
+    def populate_MessageOfTypes(self):  # NOQA
         m = MessageOfTypes()
         m.dubl = 1.7e+308
         m.flot = 3.4e+038
@@ -179,3 +183,44 @@ class Test(unittest.TestCase):
         assert i > 0
         assert m.byts == d['byts']
         assert d['nested'] == {'req': m.nested.req}
+
+
+class TestDateTime:
+
+    def test_datetime_to_timestamp_and_back(self):
+        timestamp = datetime_to_timestamp(sample_datetime)
+        result_sample_datetime = timestamp_to_datetime(timestamp)
+        assert sample_datetime == result_sample_datetime
+
+    def test_pb_convert_to_dict_with_datetime_and_back(self):
+        now = datetime.datetime.utcnow()
+        timestamp = datetime_to_timestamp(now)
+        obj1 = sample_pb2.Obj(item_id="item id", transacted_at=timestamp)
+
+        pb_dict = protobuf_to_dict(obj1)
+        assert pb_dict['transacted_at'] == now
+
+        obj1_again = dict_to_protobuf(sample_pb2.Obj, values=pb_dict)
+        assert obj1 == obj1_again
+
+
+class TestOptions:
+
+    def test_get_field_name_and_options(self):
+        for field, field_name, field_options in get_field_names_and_options(sample_pb2.Obj):
+            if field_name == 'id':
+                assert field_options == {'is_optional': True}
+
+    @pytest.mark.parametrize("test_input", [
+        {'id': 1, 'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status': 0},
+        {'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status': 0},
+    ])
+    def test_validate_dict_for_required_pb_fields_has_all_required_fields(self, test_input):
+        validate_dict_for_required_pb_fields(pb=sample_pb2.Obj, dic=test_input)
+
+    def test_validate_dict_for_required_pb_fields_has_missing_required_fields(self):
+        dic = {'id': 1, 'item_id': 2}
+        with pytest.raises(FieldsMissing) as e:
+            validate_dict_for_required_pb_fields(pb=sample_pb2.Obj, dic=dic)
+
+        assert str(e.value) == 'Missing fields: transacted_at, status'
