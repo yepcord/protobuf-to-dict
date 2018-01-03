@@ -10,14 +10,14 @@ setup(
                  'protocol buffers and the reverse. Useful as an intermediate '
                  'step before serialisation (e.g. to JSON). '
                  'Kapor: upgrade it to PB3 and PY3, rename it to protobuf3-to-dict'),
-    version='0.2.2',
+    version='0.2.3',
     author='Kapor Zhu',
     author_email='kapor.zhu@gmail.com',
     url='https://github.com/kaporzhu/protobuf-to-dict',
     license='Public Domain',
     keywords=['protobuf', 'json', 'dict'],
     install_requires=reqs,
-    packages = ['protobuf_to_dict'],
+    packages=['protobuf_to_dict'],
     tests_require=['pytest'],
     test_suite='nose.collector',
     classifiers=[
