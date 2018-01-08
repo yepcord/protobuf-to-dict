@@ -106,7 +106,7 @@ Traceback (most recent call last):
 protobuf_to_dict.convertor.FieldsMissing: Missing fields: transacted_at, status
 ````
 
-##Caveats
+## Caveats
 
 This library grew out of the desire to serialize a protobuf-encoded message to
 [JSON](http://json.org/). As JSON has no built-in binary type (all strings in
@@ -137,6 +137,15 @@ string labels instead, pass `use_enum_labels=True` into `protobuf_to_dict`:
 ```python
 >>> protobuf_to_dict(my_message, use_enum_labels=True)
 ```
+
+And if you need the enum labels to be automatically converted to lowercase:
+
+```py
+>>> protobuf_to_dict(my_message, use_enum_labels=True, lowercase_enum_lables=True)
+```
+
+When you convert from dictionary to protobuf, if you need the enums to work both
+in lowercase and uppercase, set the `strict=False`.
 
 # Testing
 

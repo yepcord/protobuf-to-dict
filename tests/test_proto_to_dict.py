@@ -43,6 +43,22 @@ class TestProtoConvertor:
         with pytest.raises(KeyError):
             dict_to_protobuf(MessageOfTypes, d)
 
+    def test_lowercase_enum_lables_work(self):
+        m = self.populate_MessageOfTypes()
+        d = protobuf_to_dict(m, use_enum_labels=True, lowercase_enum_lables=True)
+        self.compare(m, d, ['enm', 'enmRepeated', 'nestedRepeated', 'nestedMap'])
+        assert d['enm'] == 'c'
+        assert d['enmRepeated'] == ['a', 'c']
+
+        d['enm'] = 'meow'
+        d['enm'] = 'a'
+        d['enmRepeated'] = ['a', 'c']
+
+        with pytest.raises(KeyError):
+            dict_to_protobuf(MessageOfTypes, d)
+
+        dict_to_protobuf(MessageOfTypes, d, strict=False)
+
     def test_repeated_enum(self):
         m = self.populate_MessageOfTypes()
         d = protobuf_to_dict(m, use_enum_labels=True)
