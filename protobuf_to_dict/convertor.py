@@ -103,6 +103,8 @@ def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=Fa
                 continue
             if _is_map_entry(field):
                 result_dict[field.name] = {}
+            elif field.label == FieldDescriptor.LABEL_REPEATED:
+                result_dict[field.name] = []
             else:
                 result_dict[field.name] = field.default_value
 
