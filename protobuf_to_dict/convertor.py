@@ -105,6 +105,8 @@ def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=Fa
                 result_dict[field.name] = {}
             elif field.label == FieldDescriptor.LABEL_REPEATED:
                 result_dict[field.name] = []
+            elif field.type == FieldDescriptor.TYPE_ENUM and use_enum_labels:
+                result_dict[field.name] = enum_label_name(field, field.default_value, lowercase_enum_lables)
             else:
                 result_dict[field.name] = field.default_value
 
