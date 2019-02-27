@@ -171,7 +171,7 @@ def _get_field_mapping(pb, dict_value, strict):
             continue
         if key not in pb.DESCRIPTOR.fields_by_name:
             if strict:
-                raise KeyError("%s does not have a field called %s" % (pb, key))
+                raise KeyError("%s does not have a field called %s" % (type(pb), key))
             continue
         field_mapping.append((pb.DESCRIPTOR.fields_by_name[key], value, getattr(pb, key, None)))
 
@@ -205,7 +205,13 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
                     if value_field.cpp_type == FieldDescriptor.CPPTYPE_MESSAGE:
                         _dict_to_protobuf(getattr(pb, field.name)[key], value, type_callable_map, strict, ignore_none)
                     else:
-                        getattr(pb, field.name)[key] = value
+                        if ignore_none and value is None:
+                            continue
+                        try:
+                            getattr(pb, field.name)[key] = value
+                        except Exception as e:
+                            print(f"type: {type(pb)}, field: {field.name}, value: {value}. Error: {e}")
+                            raise e
                 continue
             for item in input_value:
                 if field.type == FieldDescriptor.TYPE_MESSAGE:
@@ -236,7 +242,11 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
         if field.type == FieldDescriptor.TYPE_ENUM and isinstance(input_value, six.string_types):
             input_value = _string_to_enum(field, input_value, strict)
 
-        setattr(pb, field.name, input_value)
+        try:
+            setattr(pb, field.name, input_value)
+        except Exception as e:
+            print(f"type: {type(pb)}, field: {field.name}, value: {value}. Error: {e}")
+            raise e
 
     return pb
 
