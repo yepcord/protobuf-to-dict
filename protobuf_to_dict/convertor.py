@@ -209,9 +209,8 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
                             continue
                         try:
                             getattr(pb, field.name)[key] = value
-                        except Exception as e:
-                            print(f"type: {type(pb)}, field: {field.name}, value: {value}. Error: {e}")
-                            raise e
+                        except Exception as exc:
+                            raise RuntimeError(f"type: {type(pb)}, field: {field.name}, value: {value}") from exc
                 continue
             for item in input_value:
                 if field.type == FieldDescriptor.TYPE_MESSAGE:
@@ -225,7 +224,8 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
         if isinstance(input_value, datetime.datetime):
             input_value = datetime_to_timestamp(input_value)
             # Instead of setattr we need to use CopyFrom for composite fields
-            # Otherwise we will get AttributeError: Assignment not allowed to composite field “field name” in protocol message object
+            # Otherwise we will get AttributeError:
+            #   Assignment not allowed to composite field “field name” in protocol message object
             getattr(pb, field.name).CopyFrom(input_value)
             continue
         elif field.type == FieldDescriptor.TYPE_MESSAGE:
@@ -244,9 +244,8 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
 
         try:
             setattr(pb, field.name, input_value)
-        except Exception as e:
-            print(f"type: {type(pb)}, field: {field.name}, value: {value}. Error: {e}")
-            raise e
+        except Exception as exc:
+            raise RuntimeError(f"type: {type(pb)}, field: {field.name}, value: {value}") from exc
 
     return pb
 
