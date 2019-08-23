@@ -200,6 +200,7 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
             continue
         if field.label == FieldDescriptor.LABEL_REPEATED:
             if field.message_type and field.message_type.has_options and field.message_type.GetOptions().map_entry:
+                key_field = field.message_type.fields_by_name['key']
                 value_field = field.message_type.fields_by_name['value']
                 for key, value in input_value.items():
                     if value_field.cpp_type == FieldDescriptor.CPPTYPE_MESSAGE:
@@ -208,6 +209,10 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
                         if ignore_none and value is None:
                             continue
                         try:
+                            if key_field.type in type_callable_map:
+                                key = type_callable_map[key_field.type](key)
+                            if value_field.type in type_callable_map:
+                                value = type_callable_map[value_field.type](value)
                             getattr(pb, field.name)[key] = value
                         except Exception as exc:
                             raise RuntimeError(f"type: {type(pb)}, field: {field.name}, value: {value}") from exc

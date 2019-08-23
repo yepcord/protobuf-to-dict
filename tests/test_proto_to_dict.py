@@ -2,6 +2,8 @@
 import datetime
 import pytest
 
+from google.protobuf.descriptor import FieldDescriptor
+
 from tests import sample_pb2
 from tests.sample_pb2 import MessageOfTypes
 from protobuf_to_dict import (
@@ -164,6 +166,19 @@ class TestProtoConvertor:
         m2 = dict_to_protobuf(MessageOfTypes, d, ignore_none=True)
         assert m2.nestedMap['123'].req == ''
 
+    def test_type_callable_map_used_for_maps(self):
+        # we give a string key and value and ensure they get run through int()
+        d = {}
+        d['intMap'] = {}
+        d['intMap']['123'] = '456'
+
+        type_callable_map = {
+            FieldDescriptor.TYPE_INT32: int
+        }
+        m = dict_to_protobuf(MessageOfTypes, d, type_callable_map)
+
+        assert m.intMap[123] == 456
+
     def populate_MessageOfTypes(self):  # NOQA
         m = MessageOfTypes()
         m.dubl = 1.7e+308
@@ -187,6 +202,7 @@ class TestProtoConvertor:
         m.enmRepeated.extend([MessageOfTypes.A, MessageOfTypes.C])
         m.simpleMap['s1'] = 4.2
         m.simpleMap['s2'] = 42.
+        m.intMap[123] = 456
         return m
 
     def compare(self, m, d, exclude=None):

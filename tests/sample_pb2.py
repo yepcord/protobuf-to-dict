@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='sample.proto',
   package='tests',
   syntax='proto3',
-  serialized_pb=_b('\n\x0csample.proto\x12\x05tests\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/descriptor.proto\"\xd4\x05\n\x0eMessageOfTypes\x12\x0c\n\x04\x64ubl\x18\x01 \x01(\x01\x12\x0c\n\x04\x66lot\x18\x02 \x01(\x02\x12\x0b\n\x03i32\x18\x03 \x01(\x05\x12\x0b\n\x03i64\x18\x04 \x01(\x03\x12\x0c\n\x04ui32\x18\x05 \x01(\r\x12\x0c\n\x04ui64\x18\x06 \x01(\x04\x12\x0c\n\x04si32\x18\x07 \x01(\x11\x12\x0c\n\x04si64\x18\x08 \x01(\x12\x12\x0b\n\x03\x66\x33\x32\x18\t \x01(\x07\x12\x0b\n\x03\x66\x36\x34\x18\n \x01(\x06\x12\x0c\n\x04sf32\x18\x0b \x01(\x0f\x12\x0c\n\x04sf64\x18\x0c \x01(\x10\x12\x0b\n\x03\x62ol\x18\r \x01(\x08\x12\r\n\x05strng\x18\x0e \x01(\t\x12\x0c\n\x04\x62yts\x18\x0f \x01(\x0c\x12\x30\n\x06nested\x18\x10 \x01(\x0b\x32 .tests.MessageOfTypes.NestedType\x12\'\n\x03\x65nm\x18\x11 \x01(\x0e\x32\x1a.tests.MessageOfTypes.Enum\x12\x38\n\x0enestedRepeated\x18\x12 \x03(\x0b\x32 .tests.MessageOfTypes.NestedType\x12/\n\x0b\x65nmRepeated\x18\x13 \x03(\x0e\x32\x1a.tests.MessageOfTypes.Enum\x12\x37\n\tsimpleMap\x18\x14 \x03(\x0b\x32$.tests.MessageOfTypes.SimpleMapEntry\x12\x37\n\tnestedMap\x18\x15 \x03(\x0b\x32$.tests.MessageOfTypes.NestedMapEntry\x1a\x30\n\x0eSimpleMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x02:\x02\x38\x01\x1aR\n\x0eNestedMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .tests.MessageOfTypes.NestedType:\x02\x38\x01\x1a\x19\n\nNestedType\x12\x0b\n\x03req\x18\x01 \x01(\t\"\x1b\n\x04\x45num\x12\x05\n\x01\x41\x10\x00\x12\x05\n\x01\x42\x10\x01\x12\x05\n\x01\x43\x10\x02\"z\n\x03Obj\x12\x10\n\x02id\x18\x01 \x01(\x05\x42\x04\xa0\xb5\x18\x01\x12\x0f\n\x07item_id\x18\x02 \x01(\t\x12\x31\n\rtransacted_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1d\n\x06status\x18\x05 \x01(\x0e\x32\r.tests.Status\"#\n\x04Objs\x12\x1b\n\x07objects\x18\x01 \x03(\x0b\x32\n.tests.Obj*\x1b\n\x06Status\x12\x06\n\x02OK\x10\x00\x12\t\n\x05\x45RROR\x10\x01:4\n\x0bis_optional\x12\x1d.google.protobuf.FieldOptions\x18\xd4\x86\x03 \x01(\x08\x62\x06proto3')
+  serialized_pb=_b('\n\x0csample.proto\x12\x05tests\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/descriptor.proto\"\xb6\x06\n\x0eMessageOfTypes\x12\x0c\n\x04\x64ubl\x18\x01 \x01(\x01\x12\x0c\n\x04\x66lot\x18\x02 \x01(\x02\x12\x0b\n\x03i32\x18\x03 \x01(\x05\x12\x0b\n\x03i64\x18\x04 \x01(\x03\x12\x0c\n\x04ui32\x18\x05 \x01(\r\x12\x0c\n\x04ui64\x18\x06 \x01(\x04\x12\x0c\n\x04si32\x18\x07 \x01(\x11\x12\x0c\n\x04si64\x18\x08 \x01(\x12\x12\x0b\n\x03\x66\x33\x32\x18\t \x01(\x07\x12\x0b\n\x03\x66\x36\x34\x18\n \x01(\x06\x12\x0c\n\x04sf32\x18\x0b \x01(\x0f\x12\x0c\n\x04sf64\x18\x0c \x01(\x10\x12\x0b\n\x03\x62ol\x18\r \x01(\x08\x12\r\n\x05strng\x18\x0e \x01(\t\x12\x0c\n\x04\x62yts\x18\x0f \x01(\x0c\x12\x30\n\x06nested\x18\x10 \x01(\x0b\x32 .tests.MessageOfTypes.NestedType\x12\'\n\x03\x65nm\x18\x11 \x01(\x0e\x32\x1a.tests.MessageOfTypes.Enum\x12\x38\n\x0enestedRepeated\x18\x12 \x03(\x0b\x32 .tests.MessageOfTypes.NestedType\x12/\n\x0b\x65nmRepeated\x18\x13 \x03(\x0e\x32\x1a.tests.MessageOfTypes.Enum\x12\x37\n\tsimpleMap\x18\x14 \x03(\x0b\x32$.tests.MessageOfTypes.SimpleMapEntry\x12\x37\n\tnestedMap\x18\x15 \x03(\x0b\x32$.tests.MessageOfTypes.NestedMapEntry\x12\x31\n\x06intMap\x18\x16 \x03(\x0b\x32!.tests.MessageOfTypes.IntMapEntry\x1a\x30\n\x0eSimpleMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x02:\x02\x38\x01\x1aR\n\x0eNestedMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .tests.MessageOfTypes.NestedType:\x02\x38\x01\x1a-\n\x0bIntMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x1a\x19\n\nNestedType\x12\x0b\n\x03req\x18\x01 \x01(\t\"\x1b\n\x04\x45num\x12\x05\n\x01\x41\x10\x00\x12\x05\n\x01\x42\x10\x01\x12\x05\n\x01\x43\x10\x02\"z\n\x03Obj\x12\x10\n\x02id\x18\x01 \x01(\x05\x42\x04\xa0\xb5\x18\x01\x12\x0f\n\x07item_id\x18\x02 \x01(\t\x12\x31\n\rtransacted_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1d\n\x06status\x18\x05 \x01(\x0e\x32\r.tests.Status\"#\n\x04Objs\x12\x1b\n\x07objects\x18\x01 \x03(\x0b\x32\n.tests.Obj*\x1b\n\x06Status\x12\x06\n\x02OK\x10\x00\x12\t\n\x05\x45RROR\x10\x01:4\n\x0bis_optional\x12\x1d.google.protobuf.FieldOptions\x18\xd4\x86\x03 \x01(\x08\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_descriptor__pb2.DESCRIPTOR,])
 
@@ -43,8 +43,8 @@ _STATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=978,
-  serialized_end=1005,
+  serialized_start=1076,
+  serialized_end=1103,
 )
 _sym_db.RegisterEnumDescriptor(_STATUS)
 
@@ -82,8 +82,8 @@ _MESSAGEOFTYPES_ENUM = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=788,
-  serialized_end=815,
+  serialized_start=886,
+  serialized_end=913,
 )
 _sym_db.RegisterEnumDescriptor(_MESSAGEOFTYPES_ENUM)
 
@@ -121,8 +121,8 @@ _MESSAGEOFTYPES_SIMPLEMAPENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=627,
-  serialized_end=675,
+  serialized_start=678,
+  serialized_end=726,
 )
 
 _MESSAGEOFTYPES_NESTEDMAPENTRY = _descriptor.Descriptor(
@@ -158,8 +158,45 @@ _MESSAGEOFTYPES_NESTEDMAPENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=677,
-  serialized_end=759,
+  serialized_start=728,
+  serialized_end=810,
+)
+
+_MESSAGEOFTYPES_INTMAPENTRY = _descriptor.Descriptor(
+  name='IntMapEntry',
+  full_name='tests.MessageOfTypes.IntMapEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='tests.MessageOfTypes.IntMapEntry.key', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='tests.MessageOfTypes.IntMapEntry.value', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=_descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001')),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=812,
+  serialized_end=857,
 )
 
 _MESSAGEOFTYPES_NESTEDTYPE = _descriptor.Descriptor(
@@ -188,8 +225,8 @@ _MESSAGEOFTYPES_NESTEDTYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=761,
-  serialized_end=786,
+  serialized_start=859,
+  serialized_end=884,
 )
 
 _MESSAGEOFTYPES = _descriptor.Descriptor(
@@ -346,10 +383,17 @@ _MESSAGEOFTYPES = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='intMap', full_name='tests.MessageOfTypes.intMap', index=21,
+      number=22, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
-  nested_types=[_MESSAGEOFTYPES_SIMPLEMAPENTRY, _MESSAGEOFTYPES_NESTEDMAPENTRY, _MESSAGEOFTYPES_NESTEDTYPE, ],
+  nested_types=[_MESSAGEOFTYPES_SIMPLEMAPENTRY, _MESSAGEOFTYPES_NESTEDMAPENTRY, _MESSAGEOFTYPES_INTMAPENTRY, _MESSAGEOFTYPES_NESTEDTYPE, ],
   enum_types=[
     _MESSAGEOFTYPES_ENUM,
   ],
@@ -360,7 +404,7 @@ _MESSAGEOFTYPES = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=91,
-  serialized_end=815,
+  serialized_end=913,
 )
 
 
@@ -411,8 +455,8 @@ _OBJ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=817,
-  serialized_end=939,
+  serialized_start=915,
+  serialized_end=1037,
 )
 
 
@@ -442,13 +486,14 @@ _OBJS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=941,
-  serialized_end=976,
+  serialized_start=1039,
+  serialized_end=1074,
 )
 
 _MESSAGEOFTYPES_SIMPLEMAPENTRY.containing_type = _MESSAGEOFTYPES
 _MESSAGEOFTYPES_NESTEDMAPENTRY.fields_by_name['value'].message_type = _MESSAGEOFTYPES_NESTEDTYPE
 _MESSAGEOFTYPES_NESTEDMAPENTRY.containing_type = _MESSAGEOFTYPES
+_MESSAGEOFTYPES_INTMAPENTRY.containing_type = _MESSAGEOFTYPES
 _MESSAGEOFTYPES_NESTEDTYPE.containing_type = _MESSAGEOFTYPES
 _MESSAGEOFTYPES.fields_by_name['nested'].message_type = _MESSAGEOFTYPES_NESTEDTYPE
 _MESSAGEOFTYPES.fields_by_name['enm'].enum_type = _MESSAGEOFTYPES_ENUM
@@ -456,6 +501,7 @@ _MESSAGEOFTYPES.fields_by_name['nestedRepeated'].message_type = _MESSAGEOFTYPES_
 _MESSAGEOFTYPES.fields_by_name['enmRepeated'].enum_type = _MESSAGEOFTYPES_ENUM
 _MESSAGEOFTYPES.fields_by_name['simpleMap'].message_type = _MESSAGEOFTYPES_SIMPLEMAPENTRY
 _MESSAGEOFTYPES.fields_by_name['nestedMap'].message_type = _MESSAGEOFTYPES_NESTEDMAPENTRY
+_MESSAGEOFTYPES.fields_by_name['intMap'].message_type = _MESSAGEOFTYPES_INTMAPENTRY
 _MESSAGEOFTYPES_ENUM.containing_type = _MESSAGEOFTYPES
 _OBJ.fields_by_name['transacted_at'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _OBJ.fields_by_name['status'].enum_type = _STATUS
@@ -483,6 +529,13 @@ MessageOfTypes = _reflection.GeneratedProtocolMessageType('MessageOfTypes', (_me
     ))
   ,
 
+  IntMapEntry = _reflection.GeneratedProtocolMessageType('IntMapEntry', (_message.Message,), dict(
+    DESCRIPTOR = _MESSAGEOFTYPES_INTMAPENTRY,
+    __module__ = 'sample_pb2'
+    # @@protoc_insertion_point(class_scope:tests.MessageOfTypes.IntMapEntry)
+    ))
+  ,
+
   NestedType = _reflection.GeneratedProtocolMessageType('NestedType', (_message.Message,), dict(
     DESCRIPTOR = _MESSAGEOFTYPES_NESTEDTYPE,
     __module__ = 'sample_pb2'
@@ -496,6 +549,7 @@ MessageOfTypes = _reflection.GeneratedProtocolMessageType('MessageOfTypes', (_me
 _sym_db.RegisterMessage(MessageOfTypes)
 _sym_db.RegisterMessage(MessageOfTypes.SimpleMapEntry)
 _sym_db.RegisterMessage(MessageOfTypes.NestedMapEntry)
+_sym_db.RegisterMessage(MessageOfTypes.IntMapEntry)
 _sym_db.RegisterMessage(MessageOfTypes.NestedType)
 
 Obj = _reflection.GeneratedProtocolMessageType('Obj', (_message.Message,), dict(
@@ -518,6 +572,8 @@ _MESSAGEOFTYPES_SIMPLEMAPENTRY.has_options = True
 _MESSAGEOFTYPES_SIMPLEMAPENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
 _MESSAGEOFTYPES_NESTEDMAPENTRY.has_options = True
 _MESSAGEOFTYPES_NESTEDMAPENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
+_MESSAGEOFTYPES_INTMAPENTRY.has_options = True
+_MESSAGEOFTYPES_INTMAPENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
 _OBJ.fields_by_name['id'].has_options = True
 _OBJ.fields_by_name['id']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\240\265\030\001'))
 # @@protoc_insertion_point(module_scope)
