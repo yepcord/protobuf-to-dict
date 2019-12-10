@@ -144,7 +144,7 @@ REVERSE_TYPE_CALLABLE_MAP = {
 
 
 def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=REVERSE_TYPE_CALLABLE_MAP,
-                     strict=True, ignore_none=False):
+                     strict=True, ignore_none=False, use_date_parser_for_fields=None):
     """Populates a protobuf model from a dictionary.
 
     :param pb_klass_or_instance: a protobuf message class, or an protobuf instance
@@ -156,12 +156,13 @@ def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=REVERSE_TYP
     :param bool strict: complain if keys in the map are not fields on the message.
     :param bool strict: ignore None-values of fields, treat them as empty field
     :param bool strict: when false: accept enums both in lowercase and uppercase
+    :param list use_date_parser_for_fields: a list of fields that need to use date_parser
     """
     if isinstance(pb_klass_or_instance, Message):
         instance = pb_klass_or_instance
     else:
         instance = pb_klass_or_instance()
-    return _dict_to_protobuf(instance, values, type_callable_map, strict, ignore_none)
+    return _dict_to_protobuf(instance, values, type_callable_map, strict, ignore_none, use_date_parser_for_fields)
 
 
 def _get_field_mapping(pb, dict_value, strict):
@@ -192,7 +193,7 @@ def _get_field_mapping(pb, dict_value, strict):
     return field_mapping
 
 
-def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
+def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none, use_date_parser_for_fields):
     fields = _get_field_mapping(pb, value, strict)
 
     for field, input_value, pb_value in fields:
@@ -204,7 +205,7 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
                 value_field = field.message_type.fields_by_name['value']
                 for key, value in input_value.items():
                     if value_field.cpp_type == FieldDescriptor.CPPTYPE_MESSAGE:
-                        _dict_to_protobuf(getattr(pb, field.name)[key], value, type_callable_map, strict, ignore_none)
+                        _dict_to_protobuf(getattr(pb, field.name)[key], value, type_callable_map, strict, ignore_none, use_date_parser_for_fields)
                     else:
                         if ignore_none and value is None:
                             continue
@@ -220,7 +221,7 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
             for item in input_value:
                 if field.type == FieldDescriptor.TYPE_MESSAGE:
                     m = pb_value.add()
-                    _dict_to_protobuf(m, item, type_callable_map, strict, ignore_none)
+                    _dict_to_protobuf(m, item, type_callable_map, strict, ignore_none, use_date_parser_for_fields)
                 elif field.type == FieldDescriptor.TYPE_ENUM and isinstance(item, six.string_types):
                     pb_value.append(_string_to_enum(field, item, strict))
                 else:
@@ -233,8 +234,12 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none):
             #   Assignment not allowed to composite field “field name” in protocol message object
             getattr(pb, field.name).CopyFrom(input_value)
             continue
+        elif use_date_parser_for_fields and field.name in use_date_parser_for_fields:
+            input_value = datetime_to_timestamp(date_parser(input_value))
+            getattr(pb, field.name).CopyFrom(input_value)
+            continue
         elif field.type == FieldDescriptor.TYPE_MESSAGE:
-            _dict_to_protobuf(pb_value, input_value, type_callable_map, strict, ignore_none)
+            _dict_to_protobuf(pb_value, input_value, type_callable_map, strict, ignore_none, use_date_parser_for_fields)
             continue
 
         if field.type in type_callable_map:
