@@ -235,6 +235,17 @@ class TestDateTime:
         obj1_again = dict_to_protobuf(sample_pb2.Obj, values=pb_dict)
         assert obj1 == obj1_again
 
+    def test_dict_to_protobuf_with_param_use_date_parser_for_fields(self):
+        dt = datetime.datetime.utcnow() - datetime.timedelta(days=365)
+        dt_iso_str = dt.isoformat()
+        ts = datetime_to_timestamp(dt)
+
+        obj = sample_pb2.Obj(item_id="item id", transacted_at=ts, status=sample_pb2.Status.OK)
+        dict_obj = {"item_id": "item id", "transacted_at": dt_iso_str, "status": 0}
+        
+        obj_again = dict_to_protobuf(sample_pb2.Obj, values=dict_obj, use_date_parser_for_fields=["transacted_at"])
+        assert obj == obj_again
+
 
 class TestOptions:
 
