@@ -45,9 +45,9 @@ class TestProtoConvertor:
         with pytest.raises(KeyError):
             dict_to_protobuf(MessageOfTypes, d)
 
-    def test_lowercase_enum_lables_work(self):
+    def test_lowercase_enum_labels_work(self):
         m = self.populate_MessageOfTypes()
-        d = protobuf_to_dict(m, use_enum_labels=True, lowercase_enum_lables=True)
+        d = protobuf_to_dict(m, use_enum_labels=True, lowercase_enum_labels=True)
         self.compare(m, d, ['enm', 'enmRepeated', 'nestedRepeated', 'nestedMap'])
         assert d['enm'] == 'c'
         assert d['enmRepeated'] == ['a', 'c']
