@@ -138,9 +138,14 @@ class TestProtoConvertor:
         assert d == {}
 
         d = protobuf_to_dict(m, including_default_value_fields=True)
-        for field in m.DESCRIPTOR.fields:
-            if field.name != 'nested':
-                assert field.name in d, field.name
+        expected_default_dict = {
+            'dubl': 0.0, 'flot': 0.0, 'i32': 0, 'i64': 0, 'ui32': 0,
+            'ui64': 0, 'si32': 0, 'si64': 0, 'f32': 0, 'f64': 0,
+            'sf32': 0, 'sf64': 0, 'bol': False, 'strng': '',
+            'byts': b'', 'nested': {'req': ''}, 'enm': 0, 'nestedRepeated': [],
+            'enmRepeated': [], 'simpleMap': {}, 'nestedMap': {}, 'intMap': {}
+        }
+        assert d == expected_default_dict
 
         m2 = dict_to_protobuf(MessageOfTypes, d)
         assert m == m2
