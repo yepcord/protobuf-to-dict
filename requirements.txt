@@ -1,2 +1,3 @@
 protobuf>=2.3.0
 six
+python-dateutil==2.8.2
