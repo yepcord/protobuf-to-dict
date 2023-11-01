@@ -10,7 +10,7 @@ Note: This is a fork. Install by pointing to this github repo.
 
 For example:
 
-`pip install git+ssh://git@github.com/wearefair/protobuf-to-dict`
+`pip install git@github.com:yepcord/protobuf-to-dict.git`
 
 # Example
 
