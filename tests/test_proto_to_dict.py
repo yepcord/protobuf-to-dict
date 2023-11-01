@@ -6,7 +6,7 @@ from google.protobuf.descriptor import FieldDescriptor
 
 from tests import sample_pb2
 from tests.sample_pb2 import MessageOfTypes
-from protobuf_to_dict import (
+from protobuf3_to_dict import (
     protobuf_to_dict, dict_to_protobuf, datetime_to_timestamp,
     timestamp_to_datetime, get_field_names_and_options,
     validate_dict_for_required_pb_fields, FieldsMissing)

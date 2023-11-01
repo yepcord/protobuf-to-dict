@@ -17,15 +17,15 @@ For example:
 Given the `google.protobuf.message.Message` subclass `MyMessage`:
 
 ```python
->>> from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf
->>> my_message = MyMessage()
->>> # pb_my_message is a protobuf string
->>> my_message.ParseFromString(pb_my_message)
->>> my_message_dict = protobuf_to_dict(my_message)
->>> print(my_message_dict)
+>> > from protobuf3_to_dict import protobuf_to_dict, dict_to_protobuf
+>> > my_message = MyMessage()
+>> >  # pb_my_message is a protobuf string
+>> > my_message.ParseFromString(pb_my_message)
+>> > my_message_dict = protobuf_to_dict(my_message)
+>> > print(my_message_dict)
 {'message': 'Hello'}
->>> msg = dict_to_protobuf(MyMessage, values=my_message_dict)
->>> assert msg == my_message
+>> > msg = dict_to_protobuf(MyMessage, values=my_message_dict)
+>> > assert msg == my_message
 True
 ```
 
@@ -35,7 +35,7 @@ This package automatically converts Python's datetime objects to Google's Timest
 If you want to manually do the conversion, the functions are:
 
 ```py
-from protobuf_to_dict import datetime_to_timestamp, timestamp_to_datetime
+from protobuf3_to_dict import datetime_to_timestamp, timestamp_to_datetime
 
 timestamp = datetime_to_timestamp(sample_datetime)
 result_sample_datetime = timestamp_to_datetime(timestamp)
@@ -58,9 +58,10 @@ message Obj {
 Then you can:
 
 ```py
->>> from protobuf_to_dict import get_field_names_and_options
->>> for field, field_name, options in get_field_names_and_options(sample_pb2.Obj):
-...     print('name: {}, options: {}'.format(field_name, options))
+>> > from protobuf3_to_dict import get_field_names_and_options
+>> > for field, field_name, options in get_field_names_and_options(sample_pb2.Obj):
+    ...
+print('name: {}, options: {}'.format(field_name, options))
 
 name: id, options: {'is_optional': True}
 name: item_id, options: {}
@@ -86,12 +87,12 @@ message Obj {
 Then you can validate if a dictionary has all the fields you need:
 
 ```py
->>> import datetime
->>> from protobuf_to_dict import validate_dict_for_required_pb_fields
->>>
->>> dic = {'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status':0}
->>> from tests import sample_pb2
->>> validate_dict_for_required_pb_fields(pb=sample_pb2.Obj, dic=dic)
+>> > import datetime
+>> > from protobuf3_to_dict import validate_dict_for_required_pb_fields
+>> >
+>> > dic = {'item_id': 2, 'transacted_at': datetime.datetime.now(), 'status': 0}
+>> > from tests import sample_pb2
+>> > validate_dict_for_required_pb_fields(pb=sample_pb2.Obj, dic=dic)
 ```
 
 But if you have missing fields:
@@ -119,16 +120,16 @@ If you want to override this behaviour, you may do so by passing
 `type_callable_map` kwarg:
 
 ```python
->>> from copy import copy
->>> from google.protobuf.descriptor import FieldDescriptor
->>> from protobuf_to_dict import protobuf_to_dict, TYPE_CALLABLE_MAP
->>>
->>> type_callable_map = copy(TYPE_CALLABLE_MAP)
->>> # convert TYPE_BYTES to a Python bytestring
->>> type_callable_map[FieldDescriptor.TYPE_BYTES] = str
->>>
->>> # my_message is a google.protobuf.message.Message instance
->>> protobuf_to_dict(my_message, type_callable_map=type_callable_map)
+>> > from copy import copy
+>> > from google.protobuf.descriptor import FieldDescriptor
+>> > from protobuf3_to_dict import protobuf_to_dict, TYPE_CALLABLE_MAP
+>> >
+>> > type_callable_map = copy(TYPE_CALLABLE_MAP)
+>> >  # convert TYPE_BYTES to a Python bytestring
+>> > type_callable_map[FieldDescriptor.TYPE_BYTES] = str
+>> >
+>> >  # my_message is a google.protobuf.message.Message instance
+>> > protobuf_to_dict(my_message, type_callable_map=type_callable_map)
 ```
 
 By default, the integer representation is used for enum values. To use their

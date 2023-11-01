@@ -1,3 +1,0 @@
--r requirements.txt
-grpcio_tools==1.7.3
-pytest

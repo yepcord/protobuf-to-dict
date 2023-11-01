@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "protobuf3-to-dict"
+version = "0.3.0"
+description = "A tiny Python library for creating Python dicts from protocol buffers and the reverse."
+authors = ["Kapor Zhu <kapor.zhu@gmail.com>",
+    "RuslanUC <dev_ruslan_uc@protonmail.com>"]
+readme = "README.md"
+packages = [{ include = "protobuf3_to_dict" }]
+repository = "https://github.com/yepcord/protobuf-to-dict"
+license = "Public Domain"
+keywords = ["protobuf", "json", "dict"]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: Public Domain",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+protobuf = "^4.24.4"
+python-dateutil = "^2.8.2"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+pytest-cov = "^4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+

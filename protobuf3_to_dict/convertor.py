@@ -1,11 +1,10 @@
 # -*- coding:utf-8 -*-
-import six
 import datetime
-from dateutil.parser import parse as date_parser
 
-from google.protobuf.message import Message
+from dateutil.parser import parse as date_parser
 from google.protobuf.descriptor import FieldDescriptor
 from google.protobuf.timestamp_pb2 import Timestamp
+from google.protobuf.message import Message
 
 __all__ = ["protobuf_to_dict", "TYPE_CALLABLE_MAP", "dict_to_protobuf",
            "REVERSE_TYPE_CALLABLE_MAP"]
@@ -26,23 +25,22 @@ def timestamp_to_datetime(ts):
 
 EXTENSION_CONTAINER = '___X'
 
-
 TYPE_CALLABLE_MAP = {
     FieldDescriptor.TYPE_DOUBLE: float,
     FieldDescriptor.TYPE_FLOAT: float,
     FieldDescriptor.TYPE_INT32: int,
-    FieldDescriptor.TYPE_INT64: int if six.PY3 else six.integer_types[1],
+    FieldDescriptor.TYPE_INT64: int,
     FieldDescriptor.TYPE_UINT32: int,
-    FieldDescriptor.TYPE_UINT64: int if six.PY3 else six.integer_types[1],
+    FieldDescriptor.TYPE_UINT64: int,
     FieldDescriptor.TYPE_SINT32: int,
-    FieldDescriptor.TYPE_SINT64: int if six.PY3 else six.integer_types[1],
+    FieldDescriptor.TYPE_SINT64: int,
     FieldDescriptor.TYPE_FIXED32: int,
-    FieldDescriptor.TYPE_FIXED64: int if six.PY3 else six.integer_types[1],
+    FieldDescriptor.TYPE_FIXED64: int,
     FieldDescriptor.TYPE_SFIXED32: int,
-    FieldDescriptor.TYPE_SFIXED64: int if six.PY3 else six.integer_types[1],
+    FieldDescriptor.TYPE_SFIXED64: int,
     FieldDescriptor.TYPE_BOOL: bool,
-    FieldDescriptor.TYPE_STRING: six.text_type,
-    FieldDescriptor.TYPE_BYTES: six.binary_type,
+    FieldDescriptor.TYPE_STRING: str,
+    FieldDescriptor.TYPE_BYTES: bytes,
     FieldDescriptor.TYPE_ENUM: int,
 }
 
@@ -51,26 +49,21 @@ def repeated(type_callable):
     return lambda value_list: [type_callable(value) for value in value_list]
 
 
-def enum_label_name(field, value, lowercase_enum_labels=False):
+def enum_label_name(field: FieldDescriptor, value: int, lowercase_enum_labels: bool = False) -> str:
     label = field.enum_type.values_by_number[int(value)].name
     label = label.lower() if lowercase_enum_labels else label
     return label
 
 
-def _pb_fields_and_values(pb, including_default_value_fields=False):
+def _pb_fields_and_values(pb: Message, including_default_value_fields: bool = False):
     if including_default_value_fields:
         result = ((field, getattr(pb, field.name)) for field in pb.DESCRIPTOR.fields)
         return result
     return pb.ListFields()
 
 
-def protobuf_to_dict(
-    pb,
-    type_callable_map=TYPE_CALLABLE_MAP,
-    use_enum_labels=False,
-    including_default_value_fields=False,
-    lowercase_enum_labels=False
-):
+def protobuf_to_dict(pb: Message, use_enum_labels: bool = False, including_default_value_fields: bool = False,
+                     lowercase_enum_labels: bool = False) -> dict:
     result_dict = {}
     extensions = {}
     for field, value in _pb_fields_and_values(pb, including_default_value_fields):
@@ -80,7 +73,6 @@ def protobuf_to_dict(
             adapter = _field_value_adapter(
                 pb=pb,
                 field=value_field,
-                type_callable_map=type_callable_map,
                 use_enum_labels=use_enum_labels,
                 including_default_value_fields=including_default_value_fields,
                 lowercase_enum_labels=lowercase_enum_labels
@@ -91,7 +83,6 @@ def protobuf_to_dict(
         adapter = _field_value_adapter(
             pb=pb,
             field=field,
-            type_callable_map=type_callable_map,
             use_enum_labels=use_enum_labels,
             including_default_value_fields=including_default_value_fields,
             lowercase_enum_labels=lowercase_enum_labels
@@ -110,20 +101,14 @@ def protobuf_to_dict(
     return result_dict
 
 
-def _field_value_adapter(
-    pb,
-    field,
-    type_callable_map=TYPE_CALLABLE_MAP,
-    use_enum_labels=False,
-    including_default_value_fields=False,
-    lowercase_enum_labels=False
-):
+def _field_value_adapter(pb: Message, field: FieldDescriptor, use_enum_labels: bool = False,
+                         including_default_value_fields: bool = False, lowercase_enum_labels: bool = False):
     if field.message_type and field.message_type.name == Timestamp_type_name:
         return timestamp_to_datetime
     if field.type == FieldDescriptor.TYPE_MESSAGE:
         # recursively encode protobuf sub-message
-        return lambda pb: protobuf_to_dict(
-            pb, type_callable_map=type_callable_map,
+        return lambda pb_: protobuf_to_dict(
+            pb_,
             use_enum_labels=use_enum_labels,
             including_default_value_fields=including_default_value_fields,
             lowercase_enum_labels=lowercase_enum_labels,
@@ -132,19 +117,16 @@ def _field_value_adapter(
     if use_enum_labels and field.type == FieldDescriptor.TYPE_ENUM:
         return lambda value: enum_label_name(field, value, lowercase_enum_labels)
 
-    if field.type in type_callable_map:
-        return type_callable_map[field.type]
+    if field.type in TYPE_CALLABLE_MAP:
+        return TYPE_CALLABLE_MAP[field.type]
 
-    raise TypeError(
-        "Field %s.%s has unrecognised type id %d" %
-        (pb.__class__.__name__, field.name, field.type)
-    )
+    raise TypeError(f"Field {pb.__class__.__name__}.{field.name} has unrecognised type id {field.type}")
 
 
 REVERSE_TYPE_CALLABLE_MAP = {}
 
 
-def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=REVERSE_TYPE_CALLABLE_MAP,
+def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=None,
                      strict=True, ignore_none=False, use_date_parser_for_fields=None):
     """Populates a protobuf model from a dictionary.
 
@@ -159,6 +141,9 @@ def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=REVERSE_TYP
     :param bool strict: when false: accept enums both in lowercase and uppercase
     :param list use_date_parser_for_fields: a list of fields that need to use date_parser
     """
+    if type_callable_map is None:
+        type_callable_map = REVERSE_TYPE_CALLABLE_MAP
+
     if isinstance(pb_klass_or_instance, Message):
         instance = pb_klass_or_instance
     else:
@@ -168,12 +153,13 @@ def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=REVERSE_TYP
 
 def _get_field_mapping(pb, dict_value, strict):
     field_mapping = []
+    key = 0
     for key, value in dict_value.items():
         if key == EXTENSION_CONTAINER:
             continue
         if key not in pb.DESCRIPTOR.fields_by_name:
             if strict:
-                raise KeyError("%s does not have a field called %s" % (type(pb), key))
+                raise KeyError(f"{type(pb)} does not have a field called {key}")
             continue
         field_mapping.append((pb.DESCRIPTOR.fields_by_name[key], value, getattr(pb, key, None)))
 
@@ -184,10 +170,9 @@ def _get_field_mapping(pb, dict_value, strict):
             raise ValueError("Extension keys must be integers.")
         if ext_num not in pb._extensions_by_number:
             if strict:
-                raise KeyError("%s does not have a extension with number %s. Perhaps you forgot to import it?" % (pb, key))
+                raise KeyError(f"{pb} does not have a extension with number {key}. Perhaps you forgot to import it?")
             continue
         ext_field = pb._extensions_by_number[ext_num]
-        pb_val = None
         pb_val = pb.Extensions[ext_field]
         field_mapping.append((ext_field, ext_val, pb_val))
 
@@ -206,7 +191,8 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none, use_dat
                 value_field = field.message_type.fields_by_name['value']
                 for key, value in input_value.items():
                     if value_field.cpp_type == FieldDescriptor.CPPTYPE_MESSAGE:
-                        _dict_to_protobuf(getattr(pb, field.name)[key], value, type_callable_map, strict, ignore_none, use_date_parser_for_fields)
+                        _dict_to_protobuf(getattr(pb, field.name)[key], value, type_callable_map, strict, ignore_none,
+                                          use_date_parser_for_fields)
                     else:
                         if ignore_none and value is None:
                             continue
@@ -223,7 +209,7 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none, use_dat
                 if field.type == FieldDescriptor.TYPE_MESSAGE:
                     m = pb_value.add()
                     _dict_to_protobuf(m, item, type_callable_map, strict, ignore_none, use_date_parser_for_fields)
-                elif field.type == FieldDescriptor.TYPE_ENUM and isinstance(item, six.string_types):
+                elif field.type == FieldDescriptor.TYPE_ENUM and isinstance(item, str):
                     pb_value.append(_string_to_enum(field, item, strict))
                 else:
                     pb_value.append(item)
@@ -250,7 +236,7 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict, ignore_none, use_dat
             pb.Extensions[field] = input_value
             continue
 
-        if field.type == FieldDescriptor.TYPE_ENUM and isinstance(input_value, six.string_types):
+        if field.type == FieldDescriptor.TYPE_ENUM and isinstance(input_value, str):
             input_value = _string_to_enum(field, input_value, strict)
 
         try:
